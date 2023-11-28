@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.senseiwells.nametag.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerMixin",
+    "ServerGamePacketListenerImplMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -3,13 +3,12 @@
   "id": "nametag",
   "version": "${version}",
   "name": "Custom Nametags",
-  "description": "",
+  "description": "This mod provides you with a way to customize your player's name tags completely server-side with no need for any client mods.",
   "authors": [
     "Sensei"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/senseiwells/CustomNameTags"
   },
   "license": "MIT",
   "environment": "*",
@@ -28,6 +27,7 @@
     "fabricloader": ">=0.14.12",
     "minecraft": "1.20.x",
     "java": ">=17",
+    "fabric": "*",
     "fabric-language-kotlin": ">=1.9.0+kotlin.1.8.0"
   }
 }

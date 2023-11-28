@@ -1,4 +1,4 @@
-# CustomNameTags
+# <img src="./src/main/resources/assets/nametag/icon.png" align="center" width="64px"/> CustomNameTags
 
 This mod provides you with a way to customize your player's
 name tags completely server-side with no need for any client mods.
@@ -123,3 +123,14 @@ whether an observing player will be able to see this nametag.
 This uses the [predicate api](https://github.com/Patbox/PredicateAPI/blob/1.20.2/BUILTIN.md);
 you can view the documentation for more details about what predicates you
 can define.
+
+# Caveats
+
+There are some limitations of CustomNameTags, while for almost all the cases
+the nametags will behave as expected, there are inconsistencies with the
+custom nametags.
+
+- When players press F1 to hide their HUD player custom nametags will remain visible.
+- If the player is part of a team, their normal nametag will render.
+  - This can be solved by hiding all nametags for the given team:
+  - `/team modify <team> nametagVisibility never`

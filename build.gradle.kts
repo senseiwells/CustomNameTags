@@ -3,6 +3,7 @@ plugins {
     id("fabric-loom")
     `maven-publish`
     java
+    id("me.modmuss50.mod-publish-plugin").version("0.3.4")
 }
 
 group = property("maven_group")!!
@@ -38,6 +39,7 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
+    include(modImplementation("eu.pb4:polymer-core:${property("polymer_version")}")!!)
     include(modImplementation("eu.pb4:polymer-virtual-entity:${property("polymer_version")}")!!)
     include(modImplementation("eu.pb4:placeholder-api:${property("placeholder_version")}")!!)
     include(modImplementation("eu.pb4:predicate-api:${property("predicate_api_version")}")!!)
@@ -65,4 +67,28 @@ tasks {
 
 java {
     withSourcesJar()
+}
+
+publishMods {
+    file.set(tasks.remapJar.get().archiveFile)
+    changelog.set("""
+    - Fixed a bug that caused a crash on quilt
+	""")
+    type.set(STABLE)
+    modLoaders.add("fabric")
+
+    displayName.set("CustomNameTags ${property("minecraft_version")} v${project.version}")
+
+    modrinth {
+        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+        projectId.set("TizFPouK")
+        minecraftVersions.add(property("minecraft_version").toString())
+
+        requires {
+            id.set("Ha28R6CL")
+        }
+        requires {
+            id.set("P7dR8mSH")
+        }
+    }
 }

@@ -22,6 +22,7 @@ object NameTagConfig {
         .disableHtmlEscaping()
         .registerTypeHierarchyAdapter(MinecraftPredicate::class.java, GsonPredicateSerializer.INSTANCE)
         .create()
+    private const val DEFAULT_UPDATE_INTERVAL = 1
 
     var nametags: MutableMap<ResourceLocation, NameTag> = LinkedHashMap()
 
@@ -57,6 +58,7 @@ object NameTagConfig {
         for (nametag in this.nametags.values) {
             val tag = JsonObject()
             tag.addProperty("id", nametag.id.toString())
+            tag.addProperty("update_interval", nametag.updateInterval)
             tag.addProperty("literal", nametag.literal)
             if (nametag.observee != null) {
                 tag.add("observee_predicate", GSON.toJsonTree(nametag.observee))
@@ -79,10 +81,12 @@ object NameTagConfig {
                 }
                 var property = tag.get("id") ?: continue
                 val id = ResourceLocation.tryParse(property.asString) ?: continue
-                property = json.get("update_interval")
-                val interval = if (property != null && property is JsonPrimitive && property.isNumber) {
-                    element.asInt
-                } else 1
+                val interval = if (tag.has("update_interval")) {
+                    property = tag.get("update_interval")
+                    if (property is JsonPrimitive && property.isNumber) {
+                        property.asInt
+                    } else DEFAULT_UPDATE_INTERVAL
+                } else DEFAULT_UPDATE_INTERVAL
                 property = tag.get("literal") ?: continue
                 val literal = property.asString
                 val observee = if (tag.has("observee_predicate")) {

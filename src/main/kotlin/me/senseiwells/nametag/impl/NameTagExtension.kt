@@ -50,6 +50,8 @@ class NameTagExtension(
         VirtualEntityUtils.addVirtualPassenger(this.player, *holder.entityIds.toIntArray())
         this.tags[tag] = holder
 
+        // Manually call the first update
+        display.update()
         this.updateNameTags()
     }
 
@@ -135,6 +137,10 @@ class NameTagExtension(
             // non-see-through and the foreground becomes invisible
             this.background.seeThrough = false
             this.foreground.textOpacity = -127
+
+            // We need to force-send updates at this point
+            // otherwise we have to wait for the next update call
+            this.sendTrackerUpdates()
         }
 
         fun unsneak() {
@@ -142,6 +148,18 @@ class NameTagExtension(
             this.background.seeThrough = true
             // Not sure why 255 is required here, 128 doesn't work.
             this.foreground.textOpacity = 255.toByte()
+
+            // We need to force-send updates at this point
+            // otherwise we have to wait for the next update call
+            this.sendTrackerUpdates()
+        }
+
+        fun update() {
+            val context = PlaceholderContext.of(player).asParserContext()
+            val text = this.tag.node.toText(context)
+            this.foreground.text = text
+            this.background.text = text
+            this.sendTrackerUpdates()
         }
 
         private fun initialiseDisplay(display: TextDisplayElement) {
@@ -158,11 +176,7 @@ class NameTagExtension(
 
         override fun tick() {
             if (this.tag.updateInterval > 0 && this.ticks++ % this.tag.updateInterval == 0) {
-                val context = PlaceholderContext.of(player).asParserContext()
-                val text = this.tag.node.toText(context)
-                this.foreground.text = text
-                this.background.text = text
-                this.sendTrackerUpdates()
+                this.update()
             }
         }
 

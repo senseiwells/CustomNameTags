@@ -72,11 +72,7 @@ java {
 publishMods {
     file.set(tasks.remapJar.get().archiveFile)
     changelog.set("""
-    - Fixed a bug where player names would not update correctly when sneaking/unsneaking if the update interval was not 1
-
-    - Fixed a bug where the nametag would not display if the interval was set to -1
-
-    - Updated README to indicate placeholder bug
+    - Fix a bug where nametags disappeared when players respawned
 	""")
     type.set(STABLE)
     modLoaders.add("fabric")

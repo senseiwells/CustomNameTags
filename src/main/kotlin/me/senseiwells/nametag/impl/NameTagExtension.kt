@@ -1,11 +1,6 @@
 package me.senseiwells.nametag.impl
 
 import eu.pb4.placeholders.api.PlaceholderContext
-import eu.pb4.placeholders.api.Placeholders
-import eu.pb4.placeholders.api.parsers.NodeParser
-import eu.pb4.placeholders.api.parsers.PatternPlaceholderParser
-import eu.pb4.placeholders.api.parsers.StaticPreParser
-import eu.pb4.placeholders.api.parsers.TextParserV1
 import eu.pb4.polymer.virtualentity.api.ElementHolder
 import eu.pb4.polymer.virtualentity.api.VirtualEntityUtils
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment
@@ -39,6 +34,13 @@ class NameTagExtension(
 
     private val player: ServerPlayer
         get() = this.owner.player
+
+    internal fun respawn(player: ServerPlayer) {
+        for (holder in this.tags.values) {
+            EntityAttachment.ofTicking(holder, player)
+            VirtualEntityUtils.addVirtualPassenger(player, *holder.entityIds.toIntArray())
+        }
+    }
 
     internal fun addNameTag(tag: NameTag) {
         val display = NameTagDisplay(tag)

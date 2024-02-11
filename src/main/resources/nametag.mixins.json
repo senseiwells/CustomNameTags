@@ -4,6 +4,7 @@
   "package": "me.senseiwells.nametag.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "PlayerListMixin",
     "PlayerMixin",
     "ServerGamePacketListenerImplMixin"
   ],

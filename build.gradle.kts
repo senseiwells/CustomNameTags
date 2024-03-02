@@ -9,6 +9,8 @@ plugins {
 group = property("maven_group")!!
 version = property("mod_version")!!
 
+val releaseVersion = "${project.version}+mc${project.property("minecraft_version")}"
+
 repositories {
     maven {
         url = uri("https://maven.parchmentmc.org/")
@@ -48,12 +50,28 @@ dependencies {
     // include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${property("mixin_extras_version")}")!!)!!)
 }
 
+loom {
+    runs {
+        getByName("server") {
+            runDir = "run/${project.property("minecraft_version")}"
+        }
+    }
+}
+
 tasks {
     processResources {
         inputs.property("version", project.version)
         filesMatching("fabric.mod.json") {
             expand(mutableMapOf("version" to project.version))
         }
+    }
+
+    remapJar {
+        archiveVersion.set(releaseVersion)
+    }
+
+    remapSourcesJar {
+        archiveVersion.set(releaseVersion)
     }
 
     jar {

@@ -72,7 +72,7 @@ java {
 publishMods {
     file.set(tasks.remapJar.get().archiveFile)
     changelog.set("""
-    - Fix a bug where nametags disappeared when players respawned
+    - Updated to support 1.20.4
 	""")
     type.set(STABLE)
     modLoaders.add("fabric")

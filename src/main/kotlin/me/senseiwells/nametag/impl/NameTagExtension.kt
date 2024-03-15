@@ -2,19 +2,18 @@ package me.senseiwells.nametag.impl
 
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment
 import me.senseiwells.nametag.ExtensionHolder
-import me.senseiwells.nametag.impl.nametags.NameTag
-import me.senseiwells.nametag.impl.polymer.NameTagHolder
+import me.senseiwells.nametag.api.NameTag
+import me.senseiwells.nametag.impl.entity.NameTagHolder
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.network.ServerGamePacketListenerImpl
 
-public class NameTagExtension(
+class NameTagExtension(
     private val owner: ServerGamePacketListenerImpl
 ) {
     private val holder = NameTagHolder(this.owner)
 
     internal fun respawn(player: ServerPlayer) {
         EntityAttachment.ofTicking(this.holder, player)
-        this.holder.initialise()
     }
 
     internal fun addNameTag(tag: NameTag) {
@@ -26,7 +25,7 @@ public class NameTagExtension(
     }
 
     internal fun removeAllNameTags() {
-        // TODO
+        this.holder.removeAll()
     }
 
     fun sneak() {

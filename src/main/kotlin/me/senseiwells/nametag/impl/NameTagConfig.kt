@@ -8,13 +8,12 @@ import com.google.gson.JsonPrimitive
 import eu.pb4.predicate.api.GsonPredicateSerializer
 import eu.pb4.predicate.api.MinecraftPredicate
 import me.senseiwells.nametag.CustomNameTags
-import me.senseiwells.nametag.impl.nametags.PlaceholderNameTag
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
 import java.io.IOException
 import kotlin.io.path.*
 
-
+// TODO: Improve this...
 object NameTagConfig {
     private val PATH = FabricLoader.getInstance().configDir.resolve("CustomNameTags").resolve("config.json")
     private val GSON = GsonBuilder()
@@ -61,6 +60,7 @@ object NameTagConfig {
             tag.addProperty("id", nametag.id.toString())
             tag.addProperty("update_interval", nametag.updateInterval)
             tag.addProperty("literal", nametag.literal)
+            tag.addProperty("shift_height", nametag.shiftHeight.name)
             if (nametag.observee != null) {
                 tag.add("observee_predicate", GSON.toJsonTree(nametag.observee))
             }
@@ -90,6 +90,16 @@ object NameTagConfig {
                 } else DEFAULT_UPDATE_INTERVAL
                 property = tag.get("literal") ?: continue
                 val literal = property.asString
+
+                val shift = try {
+                    if (tag.has("shift_height")) {
+                        ShiftHeight.valueOf(tag.get("shift_height").asString)
+                    } else ShiftHeight.Medium
+                } catch (e: IllegalArgumentException) {
+                    CustomNameTags.logger.error("Failed to read 'shift_height' of $id, using default")
+                    ShiftHeight.Medium
+                }
+
                 val observee = if (tag.has("observee_predicate")) {
                     this.runCatching {
                         GSON.fromJson(tag.get("observee_predicate"), MinecraftPredicate::class.java)
@@ -100,7 +110,7 @@ object NameTagConfig {
                         GSON.fromJson(tag.get("observer_predicate"), MinecraftPredicate::class.java)
                     }.getOrNull()
                 } else null
-                this.nametags[id] = PlaceholderNameTag(id, literal, interval, observee, observer)
+                this.nametags[id] = PlaceholderNameTag(id, literal, interval, shift, observee, observer)
             }
         }
     }

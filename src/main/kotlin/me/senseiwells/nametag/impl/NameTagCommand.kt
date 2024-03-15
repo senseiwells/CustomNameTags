@@ -6,7 +6,6 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import me.lucko.fabric.api.permissions.v0.Permissions
 import me.senseiwells.nametag.impl.NameTagExtension.Companion.getNameTagExtension
-import me.senseiwells.nametag.impl.nametags.PlaceholderNameTag
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.SharedSuggestionProvider
@@ -47,7 +46,7 @@ object NameTagCommand {
             throw TAG_ALREADY_EXISTS.create()
         }
 
-        val tag = PlaceholderNameTag(id, literal, 1, null, null)
+        val tag = PlaceholderNameTag(id, literal, 1, ShiftHeight.Medium, null, null)
         NameTagConfig.nametags[id] = tag
         for (player in context.source.server.playerList.players) {
             player.getNameTagExtension().addNameTag(tag)

@@ -17,7 +17,7 @@ class NameTagHolder(
     private val owner: ServerGamePacketListenerImpl
 ): ElementHolder() {
     private val nametags = Object2ObjectLinkedOpenHashMap<NameTag, NameTagElement>()
-    private val watching = Object2ObjectLinkedOpenHashMap<ServerGamePacketListenerImpl, ObjectLinkedOpenHashSet<NameTagElement>>()
+    private val watching = Object2ObjectLinkedOpenHashMap<ServerGamePacketListenerImpl, MutableSet<NameTagElement>>()
 
     val player: ServerPlayer
         get() = this.owner.player

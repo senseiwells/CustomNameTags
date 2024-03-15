@@ -21,8 +21,10 @@ object CustomNameTags: ModInitializer {
             NameTagConfig.save()
         }
         ServerPlayConnectionEvents.JOIN.register { connection, _, _ ->
+            val extension = connection.player.getNameTagExtension()
+            extension.respawn(connection.player)
             for (tag in NameTagConfig.nametags.values) {
-                connection.player.getNameTagExtension().addNameTag(tag)
+                extension.addNameTag(tag)
             }
         }
 

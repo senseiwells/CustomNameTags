@@ -8,6 +8,7 @@ import com.google.gson.JsonPrimitive
 import eu.pb4.predicate.api.GsonPredicateSerializer
 import eu.pb4.predicate.api.MinecraftPredicate
 import me.senseiwells.nametag.CustomNameTags
+import me.senseiwells.nametag.impl.nametags.PlaceholderNameTag
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
 import java.io.IOException
@@ -24,7 +25,7 @@ object NameTagConfig {
         .create()
     private const val DEFAULT_UPDATE_INTERVAL = 1
 
-    var nametags: MutableMap<ResourceLocation, NameTag> = LinkedHashMap()
+    var nametags: MutableMap<ResourceLocation, PlaceholderNameTag> = LinkedHashMap()
 
     fun read() {
         if (PATH.exists()) {
@@ -99,7 +100,7 @@ object NameTagConfig {
                         GSON.fromJson(tag.get("observer_predicate"), MinecraftPredicate::class.java)
                     }.getOrNull()
                 } else null
-                this.nametags[id] = NameTag(id, literal, interval, observee, observer)
+                this.nametags[id] = PlaceholderNameTag(id, literal, interval, observee, observer)
             }
         }
     }

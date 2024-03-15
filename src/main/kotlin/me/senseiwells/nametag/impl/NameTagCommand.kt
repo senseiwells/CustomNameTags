@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import me.lucko.fabric.api.permissions.v0.Permissions
+import me.senseiwells.nametag.CustomNameTags
 import me.senseiwells.nametag.impl.NameTagExtension.Companion.getNameTagExtension
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -29,7 +30,7 @@ object NameTagCommand {
             ).then(
                 Commands.literal("delete").then(
                     Commands.argument("identifier", ResourceLocationArgument.id()).suggests { _, b ->
-                        SharedSuggestionProvider.suggest(NameTagConfig.nametags.keys.map { it.toString() }, b)
+                        SharedSuggestionProvider.suggest(CustomNameTags.config.nametags.keys.map { it.toString() }, b)
                     }.executes(this::deleteNameTag)
                 )
             ).then(
@@ -42,16 +43,16 @@ object NameTagCommand {
         val id = ResourceLocationArgument.getId(context, "identifier")
         val literal = StringArgumentType.getString(context, "text")
 
-        if (NameTagConfig.nametags.containsKey(id)) {
+        if (CustomNameTags.config.nametags.containsKey(id)) {
             throw TAG_ALREADY_EXISTS.create()
         }
 
-        val tag = NameTag(id, literal, 1, null, null)
-        NameTagConfig.nametags[id] = tag
+        val tag = PlaceholderNameTag(id, literal, 1)
+        CustomNameTags.config.nametags[id] = tag
         for (player in context.source.server.playerList.players) {
             player.getNameTagExtension().addNameTag(tag)
         }
-        NameTagConfig.save()
+        NameTagConfig.write(CustomNameTags.config)
         context.source.sendSuccess(
             { Component.literal("Successfully create NameTag with id $id") },
             false
@@ -61,11 +62,11 @@ object NameTagCommand {
 
     private fun deleteNameTag(context: CommandContext<CommandSourceStack>): Int {
         val id = ResourceLocationArgument.getId(context, "identifier")
-        val tag = NameTagConfig.nametags.remove(id) ?: throw NO_TAG_EXISTS.create()
+        val tag = CustomNameTags.config.nametags.remove(id) ?: throw NO_TAG_EXISTS.create()
         for (player in context.source.server.playerList.players) {
             player.getNameTagExtension().removeNameTag(tag)
         }
-        NameTagConfig.save()
+        NameTagConfig.write(CustomNameTags.config)
         context.source.sendSuccess(
             { Component.literal("Successfully delete NameTag $id") },
             false
@@ -78,9 +79,8 @@ object NameTagCommand {
         for (player in players) {
             player.getNameTagExtension().removeAllNameTags()
         }
-        NameTagConfig.nametags.clear()
-        NameTagConfig.read()
-        for (tag in NameTagConfig.nametags.values) {
+        CustomNameTags.config = NameTagConfig.read()
+        for (tag in CustomNameTags.config.nametags.values) {
             for (player in players) {
                 player.getNameTagExtension().addNameTag(tag)
             }

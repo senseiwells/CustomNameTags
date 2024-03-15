@@ -28,6 +28,8 @@ class PlaceholderNameTag(
     val literal: String,
     @SerialName("update_interval")
     override val updateInterval: Int = 1,
+    @SerialName("visible_radius")
+    val visibleRadius: Double = -1.0,
     @SerialName("shift_height")
     @EncodeDefault(Mode.NEVER)
     val shiftHeight: ShiftHeight = ShiftHeight.Medium,
@@ -51,8 +53,13 @@ class PlaceholderNameTag(
     }
 
     override fun isObservable(observee: ServerPlayer, observer: ServerPlayer): Boolean {
-        val result = this.observee?.test(PredicateContext.of(observee))?.success ?: true
-        return result && (this.observer?.test(PredicateContext.of(observer))?.success ?: true)
+        var result = this.observee?.test(PredicateContext.of(observee))?.success ?: true
+        result = result && (this.observer?.test(PredicateContext.of(observer))?.success ?: true)
+        return result && this.isWithinRange(observee, observer)
+    }
+
+    private fun isWithinRange(observee: ServerPlayer, observer: ServerPlayer): Boolean {
+        return this.visibleRadius < 0 || observee.distanceToSqr(observer) < (this.visibleRadius * this.visibleRadius)
     }
 
     companion object {

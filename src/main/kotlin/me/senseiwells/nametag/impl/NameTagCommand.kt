@@ -47,7 +47,7 @@ object NameTagCommand {
             throw TAG_ALREADY_EXISTS.create()
         }
 
-        val tag = PlaceholderNameTag(id, literal, 1, ShiftHeight.Medium, null, null)
+        val tag = PlaceholderNameTag(id, literal, 1)
         CustomNameTags.config.nametags[id] = tag
         for (player in context.source.server.playerList.players) {
             player.getNameTagExtension().addNameTag(tag)

@@ -32,6 +32,7 @@ class NameTagConfig(
 
         private val json = Json {
             encodeDefaults = true
+            ignoreUnknownKeys = true
             prettyPrint = true
             prettyPrintIndent = "  "
         }
@@ -46,7 +47,7 @@ class NameTagConfig(
                     json.decodeFromStream(it)
                 }
             } catch (e: Exception) {
-                CustomNameTags.logger.error("Failed to read CustomNameTag config, generating default", e)
+                CustomNameTags.logger.error("Failed to read CustomNameTag config, generating default")
                 NameTagConfig().also { this.write(it) }
             }
         }

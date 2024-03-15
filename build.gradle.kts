@@ -91,8 +91,10 @@ java {
 publishMods {
     file.set(tasks.remapJar.get().archiveFile)
     changelog.set("""
-    - Fix a bug where nametags disappeared when players respawned
-	""")
+    - Reworked the entire nametag system
+        - This fixes a visual bug when viewing nametags from above.
+    - Added `"view_radius"` which lets you specify how far players can view a nametag before it disappearing
+	""".trimIndent())
     type.set(STABLE)
     modLoaders.add("fabric")
 

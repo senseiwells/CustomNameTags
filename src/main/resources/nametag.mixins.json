@@ -6,6 +6,7 @@
   "mixins": [
     "AgeableMobAccessor",
     "AreaEffectCloudAccessor",
+    "ArmorStandAccessor",
     "PlayerListMixin",
     "PlayerMixin",
     "ServerGamePacketListenerImplMixin"

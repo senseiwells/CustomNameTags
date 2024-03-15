@@ -13,19 +13,21 @@ import org.apache.logging.log4j.Logger
 object CustomNameTags: ModInitializer {
     val logger: Logger = LogManager.getLogger("CustomNameTags")
 
+    var config = NameTagConfig.read()
+
     override fun onInitialize() {
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             NameTagCommand.register(dispatcher)
         }
         ServerLifecycleEvents.SERVER_STOPPING.register {
-            NameTagConfig.save()
+            NameTagConfig.write(config)
         }
         ServerPlayConnectionEvents.JOIN.register { connection, _, _ ->
-            for (tag in NameTagConfig.nametags.values) {
-                connection.player.getNameTagExtension().addNameTag(tag)
+            val extension = connection.player.getNameTagExtension()
+            extension.respawn(connection.player)
+            for (tag in config.nametags.values) {
+                extension.addNameTag(tag)
             }
         }
-
-        NameTagConfig.read()
     }
 }

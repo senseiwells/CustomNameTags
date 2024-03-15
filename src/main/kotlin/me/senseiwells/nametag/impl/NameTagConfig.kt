@@ -1,105 +1,68 @@
 package me.senseiwells.nametag.impl
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.google.gson.JsonParseException
-import com.google.gson.JsonPrimitive
-import eu.pb4.predicate.api.GsonPredicateSerializer
-import eu.pb4.predicate.api.MinecraftPredicate
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import me.senseiwells.nametag.CustomNameTags
+import me.senseiwells.nametag.impl.serialization.NameTagsSerializer
+import me.senseiwells.nametag.impl.serialization.SerializableResourceLocation
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
+import org.apache.commons.lang3.SerializationException
 import java.io.IOException
-import kotlin.io.path.*
+import java.nio.file.Path
+import kotlin.io.path.createDirectories
+import kotlin.io.path.exists
+import kotlin.io.path.inputStream
+import kotlin.io.path.outputStream
 
+@OptIn(ExperimentalSerializationApi::class)
+@Serializable
+class NameTagConfig(
+    @SerialName("name_tags")
+    @Serializable(with = NameTagsSerializer::class)
+    val nametags: Object2ObjectLinkedOpenHashMap<SerializableResourceLocation, PlaceholderNameTag> = Object2ObjectLinkedOpenHashMap()
+) {
+    companion object {
+        private val config: Path = FabricLoader.getInstance().configDir.resolve("CustomNameTags").resolve("config.json")
 
-object NameTagConfig {
-    private val PATH = FabricLoader.getInstance().configDir.resolve("CustomNameTags").resolve("config.json")
-    private val GSON = GsonBuilder()
-        .serializeNulls()
-        .setPrettyPrinting()
-        .disableHtmlEscaping()
-        .registerTypeHierarchyAdapter(MinecraftPredicate::class.java, GsonPredicateSerializer.INSTANCE)
-        .create()
-    private const val DEFAULT_UPDATE_INTERVAL = 1
+        private val json = Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            prettyPrintIndent = "  "
+        }
 
-    var nametags: MutableMap<ResourceLocation, NameTag> = LinkedHashMap()
+        fun read(): NameTagConfig {
+            if (!this.config.exists()) {
+                CustomNameTags.logger.info("Generating default config")
+                return NameTagConfig().also { this.write(it) }
+            }
+            return try {
+                this.config.inputStream().use {
+                    json.decodeFromStream(it)
+                }
+            } catch (e: Exception) {
+                CustomNameTags.logger.error("Failed to read CustomNameTag config, generating default")
+                NameTagConfig().also { this.write(it) }
+            }
+        }
 
-    fun read() {
-        if (PATH.exists()) {
+        @JvmStatic
+        fun write(config: NameTagConfig) {
             try {
-                val json = PATH.bufferedReader().use {
-                    GSON.fromJson(it, JsonObject::class.java)
+                this.config.parent.createDirectories()
+                this.config.outputStream().use {
+                    json.encodeToStream(config, it)
                 }
-                this.deserialize(json)
             } catch (e: IOException) {
-                CustomNameTags.logger.error("Failed to read config", e)
-            } catch (e: JsonParseException) {
-                CustomNameTags.logger.error("Failed to read config", e)
-            }
-        }
-    }
-
-    fun save() {
-        try {
-            PATH.parent.createDirectories()
-            PATH.bufferedWriter().use {
-                GSON.toJson(this.serialize(), it)
-            }
-        } catch (e: IOException) {
-            CustomNameTags.logger.error("Failed to write config", e)
-        }
-    }
-
-    private fun serialize(): JsonObject {
-        val json = JsonObject()
-        val tags = JsonArray()
-        for (nametag in this.nametags.values) {
-            val tag = JsonObject()
-            tag.addProperty("id", nametag.id.toString())
-            tag.addProperty("update_interval", nametag.updateInterval)
-            tag.addProperty("literal", nametag.literal)
-            if (nametag.observee != null) {
-                tag.add("observee_predicate", GSON.toJsonTree(nametag.observee))
-            }
-            if (nametag.observer != null) {
-                tag.add("observer_predicate", GSON.toJsonTree(nametag.observer))
-            }
-            tags.add(tag)
-        }
-        json.add("name_tags", tags)
-        return json
-    }
-
-    private fun deserialize(json: JsonObject) {
-        val element = json.get("name_tags")
-        if (element != null && element is JsonArray) {
-            for (tag in element) {
-                if (tag !is JsonObject) {
-                    continue
-                }
-                var property = tag.get("id") ?: continue
-                val id = ResourceLocation.tryParse(property.asString) ?: continue
-                val interval = if (tag.has("update_interval")) {
-                    property = tag.get("update_interval")
-                    if (property is JsonPrimitive && property.isNumber) {
-                        property.asInt
-                    } else DEFAULT_UPDATE_INTERVAL
-                } else DEFAULT_UPDATE_INTERVAL
-                property = tag.get("literal") ?: continue
-                val literal = property.asString
-                val observee = if (tag.has("observee_predicate")) {
-                    this.runCatching {
-                        GSON.fromJson(tag.get("observee_predicate"), MinecraftPredicate::class.java)
-                    }.getOrNull()
-                } else null
-                val observer = if (tag.has("observer_predicate")) {
-                    this.runCatching {
-                        GSON.fromJson(tag.get("observer_predicate"), MinecraftPredicate::class.java)
-                    }.getOrNull()
-                } else null
-                this.nametags[id] = NameTag(id, literal, interval, observee, observer)
+                CustomNameTags.logger.error("Failed to write CustomNameTag config", e)
+            } catch (e: SerializationException) {
+                CustomNameTags.logger.error("Failed to serialize CustomNameTag config", e)
             }
         }
     }

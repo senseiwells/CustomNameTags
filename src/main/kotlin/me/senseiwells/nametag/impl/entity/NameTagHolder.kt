@@ -131,7 +131,7 @@ class NameTagHolder(
         }
 
         var previous = this.player.id
-        var shift = ShiftHeight.MediumLarge
+        var shift = ShiftHeight.ExtraExtraLarge
         val entities = IntArrayList()
         for (element in this.nametags.values.reversed()) {
             if (!watching.contains(element)) {

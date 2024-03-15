@@ -5,6 +5,7 @@ import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData
 import eu.pb4.polymer.virtualentity.api.tracker.SimpleDataTracker
 import me.senseiwells.nametag.mixin.AgeableMobAccessor
 import me.senseiwells.nametag.mixin.AreaEffectCloudAccessor
+import me.senseiwells.nametag.mixin.ArmorStandAccessor
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.world.entity.EntityType
@@ -24,7 +25,10 @@ enum class ShiftHeight(
     // 0.6 Blocks
     Large(EntityType.BEE),
     // 0.9 Blocks
-    ExtraLarge(EntityType.BAT);
+    ExtraLarge(EntityType.BAT),
+    ExtraExtraLarge(EntityType.ARMOR_STAND, {
+        set(ArmorStandAccessor.getClientFlagsAccessor(), 1)
+    });
 
     private val changed: List<SynchedEntityData.DataValue<*>>?
 

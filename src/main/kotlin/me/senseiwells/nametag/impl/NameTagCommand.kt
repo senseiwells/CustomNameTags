@@ -6,7 +6,9 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import me.lucko.fabric.api.permissions.v0.Permissions
 import me.senseiwells.nametag.CustomNameTags
-import me.senseiwells.nametag.impl.NameTagExtension.Companion.getNameTagExtension
+import me.senseiwells.nametag.impl.NameTagUtils.addNameTag
+import me.senseiwells.nametag.impl.NameTagUtils.removeAllNameTags
+import me.senseiwells.nametag.impl.NameTagUtils.removeNameTag
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.SharedSuggestionProvider
@@ -50,7 +52,7 @@ object NameTagCommand {
         val tag = PlaceholderNameTag(id, literal, 1)
         CustomNameTags.config.nametags[id] = tag
         for (player in context.source.server.playerList.players) {
-            player.getNameTagExtension().addNameTag(tag)
+            player.addNameTag(tag)
         }
         NameTagConfig.write(CustomNameTags.config)
         context.source.sendSuccess(
@@ -64,7 +66,7 @@ object NameTagCommand {
         val id = ResourceLocationArgument.getId(context, "identifier")
         val tag = CustomNameTags.config.nametags.remove(id) ?: throw NO_TAG_EXISTS.create()
         for (player in context.source.server.playerList.players) {
-            player.getNameTagExtension().removeNameTag(tag)
+            player.removeNameTag(tag)
         }
         NameTagConfig.write(CustomNameTags.config)
         context.source.sendSuccess(
@@ -77,12 +79,12 @@ object NameTagCommand {
     private fun reloadNameTags(context: CommandContext<CommandSourceStack>): Int {
         val players = context.source.server.playerList.players
         for (player in players) {
-            player.getNameTagExtension().removeAllNameTags()
+            player.removeAllNameTags()
         }
         CustomNameTags.config = NameTagConfig.read()
         for (tag in CustomNameTags.config.nametags.values) {
             for (player in players) {
-                player.getNameTagExtension().addNameTag(tag)
+                player.addNameTag(tag)
             }
         }
         context.source.sendSuccess(

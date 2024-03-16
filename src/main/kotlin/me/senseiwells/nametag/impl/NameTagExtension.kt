@@ -35,11 +35,4 @@ class NameTagExtension(
     fun unsneak() {
         this.holder.unsneak()
     }
-
-    companion object {
-        @JvmStatic
-        fun ServerPlayer.getNameTagExtension(): NameTagExtension {
-            return (this.connection as ExtensionHolder).`nametag$getExtension`()
-        }
-    }
 }

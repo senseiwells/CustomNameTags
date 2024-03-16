@@ -82,6 +82,19 @@ tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = "17"
     }
+
+    publishing {
+        publications {
+            create<MavenPublication>("mavenJava") {
+                artifact(remapJar) {
+                    builtBy(remapJar)
+                }
+                artifact(kotlinSourcesJar) {
+                    builtBy(remapSourcesJar)
+                }
+            }
+        }
+    }
 }
 
 java {

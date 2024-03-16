@@ -3,6 +3,7 @@ package me.senseiwells.nametag
 import me.senseiwells.nametag.impl.NameTagCommand
 import me.senseiwells.nametag.impl.NameTagConfig
 import me.senseiwells.nametag.impl.NameTagExtension.Companion.getNameTagExtension
+import me.senseiwells.nametag.impl.placeholder.ExtraPlayerPlaceholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -16,6 +17,8 @@ object CustomNameTags: ModInitializer {
     var config = NameTagConfig.read()
 
     override fun onInitialize() {
+        ExtraPlayerPlaceholders.register()
+
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             NameTagCommand.register(dispatcher)
         }

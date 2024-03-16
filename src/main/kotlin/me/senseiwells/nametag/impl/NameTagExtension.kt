@@ -1,7 +1,6 @@
 package me.senseiwells.nametag.impl
 
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment
-import me.senseiwells.nametag.ExtensionHolder
 import me.senseiwells.nametag.api.NameTag
 import me.senseiwells.nametag.impl.entity.NameTagHolder
 import net.minecraft.server.level.ServerPlayer

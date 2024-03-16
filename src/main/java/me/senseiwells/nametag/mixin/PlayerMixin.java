@@ -2,8 +2,6 @@ package me.senseiwells.nametag.mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import me.senseiwells.nametag.ExtensionHolder;
-import me.senseiwells.nametag.impl.NameTagExtension;
 import me.senseiwells.nametag.impl.NameTagUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;

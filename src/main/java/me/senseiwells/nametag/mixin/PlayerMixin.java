@@ -2,8 +2,7 @@ package me.senseiwells.nametag.mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import me.senseiwells.nametag.ExtensionHolder;
-import me.senseiwells.nametag.impl.NameTagExtension;
+import me.senseiwells.nametag.impl.NameTagUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,11 +37,10 @@ public abstract class PlayerMixin extends LivingEntity {
 			Pose previous = pose.get();
 			Pose current = this.getPose();
 			if (previous != current) {
-				NameTagExtension extension = NameTagExtension.getNameTagExtension(player);
 				if (previous == Pose.CROUCHING) {
-					extension.unsneak();
+					NameTagUtils.unsneakNameTags(player);
 				} else if (current == Pose.CROUCHING) {
-					extension.sneak();
+					NameTagUtils.sneakNameTags(player);
 				}
 			}
 		}

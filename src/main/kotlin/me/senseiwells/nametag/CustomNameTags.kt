@@ -2,7 +2,8 @@ package me.senseiwells.nametag
 
 import me.senseiwells.nametag.impl.NameTagCommand
 import me.senseiwells.nametag.impl.NameTagConfig
-import me.senseiwells.nametag.impl.NameTagExtension.Companion.getNameTagExtension
+import me.senseiwells.nametag.impl.NameTagUtils
+import me.senseiwells.nametag.impl.NameTagUtils.addNameTag
 import me.senseiwells.nametag.impl.placeholder.ExtraPlayerPlaceholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -26,10 +27,10 @@ object CustomNameTags: ModInitializer {
             NameTagConfig.write(config)
         }
         ServerPlayConnectionEvents.JOIN.register { connection, _, _ ->
-            val extension = connection.player.getNameTagExtension()
-            extension.respawn(connection.player)
+            val player = connection.player
+            NameTagUtils.respawnNameTags(player)
             for (tag in config.nametags.values) {
-                extension.addNameTag(tag)
+                player.addNameTag(tag)
             }
         }
     }

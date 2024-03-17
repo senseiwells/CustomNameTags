@@ -10,7 +10,7 @@ object ExtraPlayerPlaceholders {
         Placeholders.register(ResourceLocation("player", "hearts")) { ctx: PlaceholderContext, _: String? ->
             val player = ctx.player
             if (player != null) {
-                PlaceholderResult.value(String.format("%.0f", player.health / 2.0F))
+                PlaceholderResult.value(String.format("%.1f", player.health / 2.0F))
             } else {
                 PlaceholderResult.invalid("No player!")
             }

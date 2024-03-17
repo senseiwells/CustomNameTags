@@ -1,3 +1,6 @@
+import org.apache.commons.io.output.ByteArrayOutputStream
+import java.nio.charset.Charset
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization") version "1.9.21"
@@ -88,12 +91,10 @@ tasks {
     publishing {
         publications {
             create<MavenPublication>("mavenJava") {
-                artifact(remapJar) {
-                    builtBy(remapJar)
-                }
-                artifact(kotlinSourcesJar) {
-                    builtBy(remapSourcesJar)
-                }
+                groupId = "com.github.senseiwells"
+                artifactId = "CustomNameTags"
+                version = getGitHash()
+                from(project.components.getByName("java"))
             }
         }
     }
@@ -127,4 +128,13 @@ publishMods {
             id.set("P7dR8mSH")
         }
     }
+}
+
+fun getGitHash(): String {
+    val out = ByteArrayOutputStream()
+    exec {
+        commandLine("git", "rev-parse", "HEAD")
+        standardOutput = out
+    }
+    return out.toString(Charset.defaultCharset()).trim()
 }

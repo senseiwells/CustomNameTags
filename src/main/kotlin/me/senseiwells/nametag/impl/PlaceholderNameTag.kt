@@ -63,10 +63,12 @@ class PlaceholderNameTag(
     }
 
     companion object {
-        private val PARSER = NodeParser.merge(
-            TextParserV1.DEFAULT,
-            Placeholders.DEFAULT_PLACEHOLDER_PARSER,
-            StaticPreParser.INSTANCE
-        )
+        private val PARSER by lazy {
+            NodeParser.merge(
+                TextParserV1.DEFAULT,
+                Placeholders.DEFAULT_PLACEHOLDER_PARSER,
+                StaticPreParser.INSTANCE
+            )
+        }
     }
 }

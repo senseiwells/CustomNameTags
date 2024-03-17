@@ -3,6 +3,7 @@ package me.senseiwells.nametag.impl.placeholder
 import eu.pb4.placeholders.api.PlaceholderContext
 import eu.pb4.placeholders.api.PlaceholderResult
 import eu.pb4.placeholders.api.Placeholders
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
 
 object ExtraPlayerPlaceholders {

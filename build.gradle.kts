@@ -42,12 +42,12 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
-    include(modImplementation("eu.pb4:polymer-core:${property("polymer_version")}")!!)
-    include(modImplementation("eu.pb4:polymer-virtual-entity:${property("polymer_version")}")!!)
-    include(modImplementation("eu.pb4:placeholder-api:${property("placeholder_version")}")!!)
-    include(modImplementation("eu.pb4:predicate-api:${property("predicate_api_version")}")!!)
+    include(modApi("eu.pb4:polymer-core:${property("polymer_version")}")!!)
+    include(modApi("eu.pb4:polymer-virtual-entity:${property("polymer_version")}")!!)
+    include(modApi("eu.pb4:placeholder-api:${property("placeholder_version")}")!!)
+    include(modApi("eu.pb4:predicate-api:${property("predicate_api_version")}")!!)
 
-    include(modImplementation("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
+    include(modApi("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
     // include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${property("mixin_extras_version")}")!!)!!)
 
     modImplementation("com.github.senseiwells:ServerReplay:${property("server_replay_version")}")

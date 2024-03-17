@@ -1,6 +1,6 @@
 package me.senseiwells.nametag.mixin;
 
-import me.senseiwells.nametag.impl.NameTagExtension;
+import me.senseiwells.nametag.impl.NameTagUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,6 +19,6 @@ public class PlayerListMixin {
 		boolean keepEverything,
 		CallbackInfoReturnable<ServerPlayer> cir
 	) {
-		NameTagExtension.getNameTagExtension(player).respawn$CustomNameTags(cir.getReturnValue());
+		NameTagUtils.respawnNameTags(cir.getReturnValue());
 	}
 }

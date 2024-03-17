@@ -62,6 +62,18 @@ class NameTagHolder(
         }
     }
 
+    fun isNameTagVisibleTo(tag: NameTag, player: ServerPlayer): Boolean {
+        val element = this.nametags[tag] ?: return false
+        return element.watching.contains(player.connection)
+    }
+
+    fun resendNamesTagTo(player: ServerPlayer, consumer: Consumer<Packet<ClientGamePacketListener>>) {
+        val elements = this.watching[player.connection] ?: return
+        for (element in elements) {
+            element.sendSpawnPackets(consumer)
+        }
+    }
+
     override fun startWatching(connection: ServerGamePacketListenerImpl): Boolean {
         if (super.startWatching(connection)) {
             this.updateWatcher(connection)

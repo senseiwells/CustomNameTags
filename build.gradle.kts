@@ -49,6 +49,8 @@ dependencies {
 
     include(modImplementation("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
     // include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${property("mixin_extras_version")}")!!)!!)
+
+    modImplementation("com.github.senseiwells:ServerReplay:${property("server_replay_version")}")
 }
 
 loom {

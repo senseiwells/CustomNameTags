@@ -114,6 +114,7 @@ class NameTagHolder(
 
             // This checks if the player is visible to our watcher
             val canWatch = this.player.broadcastToPlayer(connection.player) &&
+                !this.player.isInvisible &&
                 element.tag.isObservable(this.player, connection.player)
 
             if (watching) {

@@ -38,7 +38,7 @@ class NameTagElement(
         this.initialiseDisplay(this.background)
         this.initialiseDisplay(this.foreground)
 
-        this.background.seeThrough = true
+        this.background.seeThrough = this.tag.visibleThroughWalls
         this.background.textOpacity = 30.toByte()
         this.foreground.seeThrough = false
         this.foreground.textOpacity = 255.toByte()
@@ -56,7 +56,7 @@ class NameTagElement(
 
     fun unsneak() {
         // When the player un-sneaks, we return to default
-        this.background.seeThrough = true
+        this.background.seeThrough = this.tag.visibleThroughWalls
         // Not sure why 255 is required here, 128 doesn't work.
         this.foreground.textOpacity = 255.toByte()
 

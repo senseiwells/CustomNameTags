@@ -30,6 +30,9 @@ class PlaceholderNameTag(
     override val updateInterval: Int = 1,
     @SerialName("visible_radius")
     val visibleRadius: Double = -1.0,
+    @SerialName("visible_through_walls")
+    @EncodeDefault(Mode.NEVER)
+    override val visibleThroughWalls: Boolean = true,
     @SerialName("shift_height")
     @EncodeDefault(Mode.NEVER)
     val shiftHeight: ShiftHeight = ShiftHeight.Medium,

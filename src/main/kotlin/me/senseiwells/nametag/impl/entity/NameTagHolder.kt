@@ -111,7 +111,10 @@ class NameTagHolder(
         var dirty = false
         for (element in this.nametags.values) {
             val watching = element.watching.contains(connection)
-            val canWatch = element.tag.isObservable(this.player, connection.player)
+
+            // This checks if the player is visible to our watcher
+            val canWatch = this.player.broadcastToPlayer(connection.player) &&
+                element.tag.isObservable(this.player, connection.player)
 
             if (watching) {
                 if (!canWatch) {

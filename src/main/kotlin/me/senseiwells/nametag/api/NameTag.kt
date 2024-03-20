@@ -6,6 +6,8 @@ import net.minecraft.server.level.ServerPlayer
 
 interface NameTag {
     val updateInterval: Int
+    val visibleThroughWalls: Boolean
+        get() = true
 
     fun getComponent(player: ServerPlayer): Component
 

@@ -16,21 +16,13 @@ version = property("mod_version")!!
 val releaseVersion = "${project.version}+mc${project.property("minecraft_version")}"
 
 repositories {
-    maven {
-        url = uri("https://maven.parchmentmc.org/")
-    }
-    maven {
-        url = uri("https://jitpack.io")
-    }
-    maven {
-        url = uri("https://ueaj.dev/maven")
-    }
-    maven {
-        url = uri("https://maven.nucleoid.xyz")
-    }
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-    }
+    maven("https://maven.parchmentmc.org/")
+    maven("https://jitpack.io")
+    maven("https://ueaj.dev/maven")
+    maven("https://maven.nucleoid.xyz")
+    maven("https://maven.maxhenkel.de/repository/public")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    mavenCentral()
 }
 
 @Suppress("UnstableApiUsage")

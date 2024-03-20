@@ -14,7 +14,6 @@ import kotlinx.serialization.json.JsonEncoder
 
 object MinecraftPredicateSerializer: KSerializer<MinecraftPredicate> {
     private val GSON = GsonBuilder()
-        .serializeNulls()
         .disableHtmlEscaping()
         .registerTypeHierarchyAdapter(MinecraftPredicate::class.java, GsonPredicateSerializer.INSTANCE)
         .create()

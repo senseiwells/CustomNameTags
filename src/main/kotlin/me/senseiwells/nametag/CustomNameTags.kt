@@ -5,6 +5,7 @@ import me.senseiwells.nametag.impl.NameTagConfig
 import me.senseiwells.nametag.impl.NameTagUtils
 import me.senseiwells.nametag.impl.NameTagUtils.addNameTag
 import me.senseiwells.nametag.impl.placeholder.ExtraPlayerPlaceholders
+import me.senseiwells.nametag.impl.predicate.ExtraPredicates
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -15,11 +16,16 @@ import org.apache.logging.log4j.Logger
 object CustomNameTags: ModInitializer {
     val logger: Logger = LogManager.getLogger("CustomNameTags")
 
-    var config = NameTagConfig.read()
+    var config: NameTagConfig
+
+    init {
+        ExtraPlayerPlaceholders.register()
+        ExtraPredicates.register()
+
+        this.config = NameTagConfig.read()
+    }
 
     override fun onInitialize() {
-        ExtraPlayerPlaceholders.register()
-
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             NameTagCommand.register(dispatcher)
         }

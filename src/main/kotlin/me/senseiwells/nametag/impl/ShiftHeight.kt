@@ -14,18 +14,36 @@ enum class ShiftHeight(
     internal val type: EntityType<*>,
     modifier: DataTrackerLike.() -> Unit = { }
 ) {
-    // 0.3 Blocks
+    /**
+     * This is the default height for text displays.
+     * Its height is equivalent to 0.3 blocks.
+     */
     Medium(EntityType.BEE, {
         set(AgeableMobAccessor.getIsBabyDataAccessor(), true)
     }),
-    // 0.5 Blocks
+
+    /**
+     * This is a slightly larger height for text displays.
+     * It is used as the initial shift above the player's head.
+     * Its height is equivalent to 0.5 blocks.
+     */
     MediumLarge(EntityType.AREA_EFFECT_CLOUD, {
         set(AreaEffectCloudAccessor.getRadiusAccessor(), 0.0F)
     }),
-    // 0.6 Blocks
+
+    /**
+     * This height is equivalent to 0.6 blocks.
+     */
     Large(EntityType.BEE),
-    // 0.9 Blocks
+
+    /**
+     * This height is equivalent to 0.9 blocks.
+     */
     ExtraLarge(EntityType.BAT),
+
+    /**
+     * This height is equivalent to 0.9875 blocks.
+     */
     ExtraExtraLarge(EntityType.ARMOR_STAND, {
         set(ArmorStandAccessor.getClientFlagsAccessor(), 1)
     });

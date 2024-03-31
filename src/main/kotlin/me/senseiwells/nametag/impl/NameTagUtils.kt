@@ -14,23 +14,28 @@ object NameTagUtils {
     private val ServerPlayer.nameTagHolder: NameTagHolder
         get() = (this.connection as NameTagHolderExtension).`nametag$getHolder`()
 
+    @JvmStatic
     fun ServerPlayer.addNameTag(tag: NameTag) {
         this.nameTagHolder.add(tag)
     }
 
+    @JvmStatic
     fun ServerPlayer.removeNameTag(tag: NameTag) {
         this.nameTagHolder.remove(tag)
     }
 
+    @JvmStatic
     fun ServerPlayer.removeAllNameTags() {
         this.nameTagHolder.removeAll()
     }
 
+    @JvmStatic
     @Suppress("unused")
     fun ServerPlayer.isNameTagVisibleTo(nametag: NameTag, other: ServerPlayer): Boolean {
         return this.nameTagHolder.isNameTagVisibleTo(nametag, other)
     }
 
+    @JvmStatic
     fun ServerPlayer.resendNameTagsTo(player: ServerPlayer, consumer: Consumer<Packet<ClientGamePacketListener>>) {
         this.nameTagHolder.resendNamesTagTo(player, consumer)
     }

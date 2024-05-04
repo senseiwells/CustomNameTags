@@ -10,9 +10,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.network.ServerGamePacketListenerImpl
 import net.minecraft.world.entity.Display
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
@@ -29,8 +29,8 @@ class NameTagElement(
 
     private var ticks = 0
 
-    private val player: ServerPlayer
-        get() = this.owner.player
+    private val entity: Entity
+        get() = this.owner.entity
 
     internal val shift = NameTagShiftElement()
 
@@ -64,7 +64,7 @@ class NameTagElement(
     }
 
     fun update() {
-        val text = this.tag.getComponent(this.player)
+        val text = this.tag.getComponent(this.entity)
         this.foreground.text = text
         this.background.text = text
 
@@ -93,7 +93,7 @@ class NameTagElement(
     fun sendSpawnPackets(consumer: Consumer<Packet<ClientGamePacketListener>>) {
         this.sendInitialPacketsForTag(this.background, consumer)
         this.sendInitialPacketsForTag(this.foreground, consumer)
-        this.shift.sendSpawnPackets(this.player.position(), consumer)
+        this.shift.sendSpawnPackets(this.entity.position(), consumer)
     }
 
     fun sendRemovePackets(consumer: Consumer<Packet<ClientGamePacketListener>>) {
@@ -106,7 +106,7 @@ class NameTagElement(
 
     fun updateShiftPackets(type: ShiftHeight, consumer: Consumer<Packet<ClientGamePacketListener>>) {
         consumer.accept(ClientboundRemoveEntitiesPacket(this.shift.id))
-        this.shift.sendSpawnPackets(this.player.position(), consumer, type)
+        this.shift.sendSpawnPackets(this.entity.position(), consumer, type)
     }
 
     private fun sendDirtyPackets() {
@@ -121,9 +121,9 @@ class NameTagElement(
         consumer.accept(ClientboundAddEntityPacket(
             display.entityId,
             display.uuid,
-            this.player.x,
-            this.player.y,
-            this.player.z,
+            this.entity.x,
+            this.entity.y,
+            this.entity.z,
             display.pitch,
             display.yaw,
             EntityType.TEXT_DISPLAY,

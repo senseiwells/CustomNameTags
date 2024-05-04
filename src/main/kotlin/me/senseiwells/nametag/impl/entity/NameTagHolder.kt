@@ -11,16 +11,17 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.network.ServerGamePacketListenerImpl
+import net.minecraft.world.entity.Entity
 import java.util.function.Consumer
 
 class NameTagHolder(
-    private val owner: ServerGamePacketListenerImpl
+    private val owner: () -> Entity
 ): ElementHolder() {
     private val nametags = Object2ObjectLinkedOpenHashMap<NameTag, NameTagElement>()
     private val watching = Object2ObjectLinkedOpenHashMap<ServerGamePacketListenerImpl, MutableSet<NameTagElement>>()
 
-    val player: ServerPlayer
-        get() = this.owner.player
+    val entity: Entity
+        get() = this.owner()
 
     fun add(tag: NameTag) {
         val element = NameTagElement(this, tag)
@@ -113,9 +114,9 @@ class NameTagHolder(
             val watching = element.watching.contains(connection)
 
             // This checks if the player is visible to our watcher
-            val canWatch = this.player.broadcastToPlayer(connection.player) &&
-                !this.player.isInvisible &&
-                element.tag.isObservable(this.player, connection.player)
+            val canWatch = this.entity.broadcastToPlayer(connection.player) &&
+                !this.entity.isInvisible &&
+                element.tag.isObservable(this.entity, connection.player)
 
             if (watching) {
                 if (!canWatch) {
@@ -146,8 +147,8 @@ class NameTagHolder(
             return
         }
 
-        var previous = this.player.id
-        var shift = ShiftHeight.MediumLarge
+        var previous = this.entity.id
+        var shift = ShiftHeight.DEFAULT
         val entities = IntArrayList()
         for (element in this.nametags.values.reversed()) {
             if (!watching.contains(element)) {

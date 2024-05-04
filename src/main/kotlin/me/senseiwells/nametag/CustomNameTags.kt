@@ -26,8 +26,8 @@ object CustomNameTags: ModInitializer {
     }
 
     override fun onInitialize() {
-        CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
-            NameTagCommand.register(dispatcher)
+        CommandRegistrationCallback.EVENT.register { dispatcher, context, _ ->
+            NameTagCommand.register(dispatcher, context)
         }
         ServerLifecycleEvents.SERVER_STOPPING.register {
             NameTagConfig.write(config)

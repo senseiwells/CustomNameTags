@@ -4,9 +4,7 @@
   "package": "me.senseiwells.nametag.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "AgeableMobAccessor",
     "AreaEffectCloudAccessor",
-    "ArmorStandAccessor",
     "PlayerListMixin",
     "PlayerMixin",
     "ServerGamePacketListenerImplMixin"

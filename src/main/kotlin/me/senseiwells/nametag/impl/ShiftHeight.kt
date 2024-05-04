@@ -1,65 +1,68 @@
 package me.senseiwells.nametag.impl
 
-import eu.pb4.polymer.virtualentity.api.tracker.DataTrackerLike
 import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData
 import eu.pb4.polymer.virtualentity.api.tracker.SimpleDataTracker
-import me.senseiwells.nametag.mixin.AgeableMobAccessor
-import me.senseiwells.nametag.mixin.AreaEffectCloudAccessor
-import me.senseiwells.nametag.mixin.ArmorStandAccessor
+import kotlinx.serialization.Serializable
+import me.senseiwells.nametag.impl.serialization.ShiftHeightSerializer
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket
 import net.minecraft.network.syncher.SynchedEntityData
-import net.minecraft.world.entity.EntityType
+import net.minecraft.util.Mth
+import net.minecraft.world.entity.EntityType.ARMOR_STAND
+import net.minecraft.world.entity.ai.attributes.AttributeInstance
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.phys.Vec3
+import java.util.*
+import java.util.function.Consumer
 
-enum class ShiftHeight(
-    internal val type: EntityType<*>,
-    modifier: DataTrackerLike.() -> Unit = { }
-) {
-    /**
-     * This is the default height for text displays.
-     * Its height is equivalent to 0.3 blocks.
-     */
-    Medium(EntityType.BEE, {
-        set(AgeableMobAccessor.getIsBabyDataAccessor(), true)
-    }),
-
-    /**
-     * This is a slightly larger height for text displays.
-     * It is used as the initial shift above the player's head.
-     * Its height is equivalent to 0.5 blocks.
-     */
-    MediumLarge(EntityType.AREA_EFFECT_CLOUD, {
-        set(AreaEffectCloudAccessor.getRadiusAccessor(), 0.0F)
-    }),
-
-    /**
-     * This height is equivalent to 0.6 blocks.
-     */
-    Large(EntityType.BEE),
-
-    /**
-     * This height is equivalent to 0.9 blocks.
-     */
-    ExtraLarge(EntityType.BAT),
-
-    /**
-     * This height is equivalent to 0.9875 blocks.
-     */
-    ExtraExtraLarge(EntityType.ARMOR_STAND, {
-        set(ArmorStandAccessor.getClientFlagsAccessor(), 1)
-    });
-
+@Serializable(with = ShiftHeightSerializer::class)
+class ShiftHeight private constructor(internal val scale: Double) {
     private val changed: List<SynchedEntityData.DataValue<*>>?
+    private var attribute: AttributeInstance? = null
 
     init {
-        val tracker = SimpleDataTracker(this.type)
+        val tracker = SimpleDataTracker(ARMOR_STAND)
         tracker.set(EntityTrackedData.SILENT, true)
         tracker.set(EntityTrackedData.NO_GRAVITY, true)
         tracker.set(EntityTrackedData.FLAGS, (1 shl EntityTrackedData.INVISIBLE_FLAG_INDEX).toByte())
-        modifier(tracker)
+
         this.changed = tracker.changedEntries
+
+        if (this.scale != 1.0) {
+            val attribute = AttributeInstance(Attributes.SCALE) { }
+            val modifier = AttributeModifier(SCALE_IDENTIFIER, "nametag_scale", this.scale - 1.0, ADD_MULTIPLIED_BASE)
+            attribute.addPermanentModifier(modifier)
+            this.attribute = attribute
+        }
     }
 
-    fun createDataPacket(id: Int): ClientboundSetEntityDataPacket? {
-        return ClientboundSetEntityDataPacket(id, this.changed ?: return null)
+    fun applySpawnPackets(id: Int, uuid: UUID, position: Vec3, consumer: Consumer<Packet<ClientGamePacketListener>>) {
+        consumer.accept(ClientboundAddEntityPacket(
+            id, uuid, position.x, position.y, position.z, 0.0F, 0.0F, ARMOR_STAND, 0, Vec3.ZERO, 0.0
+        ))
+
+        if (this.changed != null) {
+            consumer.accept(ClientboundSetEntityDataPacket(id, this.changed))
+        }
+        val attribute = this.attribute
+        if (attribute != null) {
+            consumer.accept(ClientboundUpdateAttributesPacket(id, listOf(attribute)))
+        }
+    }
+
+    companion object {
+        private val SCALE_IDENTIFIER = UUID.fromString("cbafc7de-4b4d-4c8e-992e-2ec782cdb141")
+
+        val SMALL = of(0.275)
+        val DEFAULT = of(0.45)
+
+        fun of(height: Double): ShiftHeight {
+            return ShiftHeight(Mth.clamp(height / 1.975, 0.0625, 16.0))
+        }
     }
 }

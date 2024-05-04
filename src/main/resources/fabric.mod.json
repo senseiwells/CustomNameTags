@@ -18,9 +18,6 @@
         "adapter": "kotlin",
         "value": "me.senseiwells.nametag.CustomNameTags"
       }
-    ],
-    "server_replay": [
-      "me.senseiwells.nametag.impl.compat.NametagReplayPlugin"
     ]
   },
   "mixins": [

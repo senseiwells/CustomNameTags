@@ -12,6 +12,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.serializer
 import me.senseiwells.nametag.CustomNameTags
+import net.minecraft.core.RegistryAccess
 import net.minecraft.data.registries.VanillaRegistries
 import net.minecraft.network.chat.Component
 
@@ -25,7 +26,7 @@ object ComponentSerializer: KSerializer<Component> {
         }
         val componentJson = decoder.json.encodeToString(decoder.decodeJsonElement())
         try {
-            val component = Component.Serializer.fromJson(componentJson, VanillaRegistries.createLookup())
+            val component = Component.Serializer.fromJson(componentJson, RegistryAccess.EMPTY)
             if (component != null) {
                 return component
             }
@@ -41,7 +42,7 @@ object ComponentSerializer: KSerializer<Component> {
             throw IllegalArgumentException("Can only serialize components as JSON")
         }
         encoder.encodeJsonElement(
-            encoder.json.parseToJsonElement(Component.Serializer.toJson(value, VanillaRegistries.createLookup()))
+            encoder.json.parseToJsonElement(Component.Serializer.toJson(value, RegistryAccess.EMPTY))
         )
     }
 }

@@ -97,9 +97,7 @@ java {
 publishMods {
     file.set(tasks.remapJar.get().archiveFile)
     changelog.set("""
-    - Reworked the entire nametag system
-        - This fixes a visual bug when viewing nametags from above.
-    - Added `"view_radius"` which lets you specify how far players can view a nametag before it disappearing
+    - Update to 1.20.5
 	""".trimIndent())
     type.set(STABLE)
     modLoaders.add("fabric")

@@ -3,6 +3,9 @@ package me.senseiwells.nametag.impl
 import eu.pb4.placeholders.api.PlaceholderContext
 import eu.pb4.placeholders.api.Placeholders
 import eu.pb4.placeholders.api.node.TextNode
+import eu.pb4.placeholders.api.parsers.NodeParser
+import eu.pb4.placeholders.api.parsers.StaticPreParser
+import eu.pb4.placeholders.api.parsers.TagParser
 import eu.pb4.predicate.api.MinecraftPredicate
 import eu.pb4.predicate.api.PredicateContext
 import kotlinx.serialization.EncodeDefault
@@ -47,7 +50,7 @@ class PlaceholderNameTag(
     @Serializable(with = MinecraftPredicateSerializer::class)
     val observer: MinecraftPredicate? = null
 ): NameTag {
-    private val node: TextNode by lazy { Placeholders.parseNodes(TextNode.convert(this.display)) }
+    private val node: TextNode by lazy { PARSER.parseNode(TextNode.convert(this.display)) }
 
     override fun getComponent(entity: Entity): Component {
         return this.node.toText(PlaceholderContext.of(entity))
@@ -65,5 +68,15 @@ class PlaceholderNameTag(
 
     private fun isWithinRange(observee: Entity, observer: ServerPlayer): Boolean {
         return this.visibleRadius < 0 || observee.distanceToSqr(observer) < (this.visibleRadius * this.visibleRadius)
+    }
+
+    companion object {
+        private val PARSER by lazy {
+            NodeParser.merge(
+                TagParser.DEFAULT,
+                Placeholders.DEFAULT_PLACEHOLDER_PARSER,
+                StaticPreParser.INSTANCE
+            )
+        }
     }
 }

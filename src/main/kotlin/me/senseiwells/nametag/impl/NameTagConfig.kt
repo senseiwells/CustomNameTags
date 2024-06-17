@@ -11,7 +11,6 @@ import me.senseiwells.nametag.CustomNameTags
 import me.senseiwells.nametag.impl.serialization.NameTagsSerializer
 import me.senseiwells.nametag.impl.serialization.SerializableResourceLocation
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.ResourceLocation
 import org.apache.commons.lang3.SerializationException
 import java.io.IOException
 import java.nio.file.Path

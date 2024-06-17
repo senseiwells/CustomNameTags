@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityType.ARMOR_STAND
 import net.minecraft.world.entity.ai.attributes.AttributeInstance
@@ -35,7 +36,7 @@ class ShiftHeight private constructor(internal val scale: Double) {
 
         if (this.scale != 1.0) {
             val attribute = AttributeInstance(Attributes.SCALE) { }
-            val modifier = AttributeModifier(SCALE_IDENTIFIER, "nametag_scale", this.scale - 1.0, ADD_MULTIPLIED_BASE)
+            val modifier = AttributeModifier(SCALE_IDENTIFIER, this.scale - 1.0, ADD_MULTIPLIED_BASE)
             attribute.addPermanentModifier(modifier)
             this.attribute = attribute
         }
@@ -56,7 +57,7 @@ class ShiftHeight private constructor(internal val scale: Double) {
     }
 
     companion object {
-        private val SCALE_IDENTIFIER = UUID.fromString("cbafc7de-4b4d-4c8e-992e-2ec782cdb141")
+        private val SCALE_IDENTIFIER = ResourceLocation.fromNamespaceAndPath("nametag", "scale")
 
         val SMALL = of(0.275)
         val DEFAULT = of(0.45)

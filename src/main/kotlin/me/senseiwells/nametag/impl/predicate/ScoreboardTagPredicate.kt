@@ -15,7 +15,7 @@ class ScoreboardTagPredicate(val tag: String): AbstractPredicate(ID, CODEC) {
     }
 
     companion object {
-        val ID = ResourceLocation("scoreboard_tag")
+        val ID: ResourceLocation = ResourceLocation.withDefaultNamespace("scoreboard_tag")
 
         val CODEC: MapCodec<ScoreboardTagPredicate> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(

@@ -11,11 +11,13 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonEncoder
+import net.minecraft.core.RegistryAccess
+import net.minecraft.core.registries.BuiltInRegistries
 
 object MinecraftPredicateSerializer: KSerializer<MinecraftPredicate> {
     private val GSON = GsonBuilder()
         .disableHtmlEscaping()
-        .registerTypeHierarchyAdapter(MinecraftPredicate::class.java, GsonPredicateSerializer.INSTANCE)
+        .registerTypeHierarchyAdapter(MinecraftPredicate::class.java, GsonPredicateSerializer.create(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)))
         .create()
 
     override val descriptor: SerialDescriptor = JsonElement.serializer().descriptor

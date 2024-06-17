@@ -97,7 +97,7 @@ java {
 publishMods {
     file.set(tasks.remapJar.get().archiveFile)
     changelog.set("""
-    - Update to 1.20.5
+    - Update to 1.21
 	""".trimIndent())
     type.set(STABLE)
     modLoaders.add("fabric")

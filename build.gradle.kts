@@ -21,12 +21,13 @@ val fabricKotlinVersion: String by project
 val polymerVersion: String by project
 val placeholderVersion: String by project
 val predicateApiVersion: String by project
-// val serverReplayVersion: String by project
+val serverReplayVersion: String by project
 
 version = "${modVersion}+mc${mcVersion}"
 group = "me.senseiwells"
 
 repositories {
+    mavenLocal()
     maven("https://maven.parchmentmc.org/")
     maven("https://jitpack.io")
     maven("https://ueaj.dev/maven")
@@ -55,7 +56,7 @@ dependencies {
 
     include(modImplementation("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
 
-    // modImplementation("com.github.senseiwells:ServerReplay:${serverReplayVersion}")
+    modImplementation("com.github.senseiwells:ServerReplay:${serverReplayVersion}")
 }
 
 loom {

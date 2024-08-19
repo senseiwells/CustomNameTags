@@ -73,6 +73,7 @@ class NameTagHolder(
         for (element in elements) {
             element.sendSpawnPackets(consumer)
         }
+        this.resendNameTagStackFor(elements, consumer)
     }
 
     override fun startWatching(connection: ServerGamePacketListenerImpl): Boolean {

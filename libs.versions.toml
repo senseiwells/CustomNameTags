@@ -1,0 +1,31 @@
+[versions]
+fabric-loom          = "1.7-SNAPSHOT"
+mod-publish          = "0.7.0"
+kotlin-serialization = "1.9.21"
+minecraft            = "1.21.1"
+fabric-loader        = "0.16.5"
+parchment            = "1.21:2024.07.28"
+fabric-api           = "0.103.0+1.21.1"
+fabric-kotlin        = "1.11.0+kotlin.2.0.0"
+polymer              = "0.9.12+1.21.1"
+placeholder          = "2.4.1+1.21"
+predicate            = "0.5.2+1.21"
+server-replay        = "1.1.2+1.21.1"
+permissions          = "0.3.1"
+
+[libraries]
+minecraft               = { module = "com.mojang:minecraft"                 , version.ref = "minecraft" }
+fabric-loader           = { module = "net.fabricmc:fabric-loader"           , version.ref = "fabric-loader" }
+fabric-api              = { module = "net.fabricmc.fabric-api:fabric-api"   , version.ref = "fabric-api" }
+fabric-kotlin           = { module = "net.fabricmc:fabric-language-kotlin"  , version.ref = "fabric-kotlin" }
+permissions             = { module = "me.lucko:fabric-permissions-api"      , version.ref = "permissions" }
+polymer-core            = { module = "eu.pb4:polymer-core"                  , version.ref = "polymer" }
+polymer-virtual-entity  = { module = "eu.pb4:polymer-virtual-entity"        , version.ref = "polymer" }
+placeholder             = { module = "eu.pb4:placeholder-api"               , version.ref = "placeholder" }
+predicate               = { module = "eu.pb4:predicate-api"                 , version.ref = "predicate" }
+server-replay           = { module = "me.senseiwells:server-replay"         , version.ref = "server-replay" }
+
+[plugins]
+fabric-loom   = { id = "fabric-loom", version.ref = "fabric-loom" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
+mod-publish   = { id = "me.modmuss50.mod-publish-plugin", version.ref = "mod-publish" }

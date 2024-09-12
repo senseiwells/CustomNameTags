@@ -1,70 +1,69 @@
-import org.apache.commons.io.output.ByteArrayOutputStream
-import java.nio.charset.Charset
-
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization") version "1.9.21"
-    id("fabric-loom")
+    val jvmVersion = libs.versions.fabric.kotlin.get()
+        .split("+kotlin.")[1]
+        .split("+")[0]
+
+    kotlin("jvm").version(jvmVersion)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.fabric.loom)
+    alias(libs.plugins.mod.publish)
     `maven-publish`
     java
-    id("me.modmuss50.mod-publish-plugin").version("0.3.4")
 }
 
-val modVersion: String by project
-
-val mcVersion: String by project
-val parchmentVersion: String by project
-val loaderVersion: String by project
-val fabricVersion: String by project
-val fabricKotlinVersion: String by project
-
-val polymerVersion: String by project
-val placeholderVersion: String by project
-val predicateApiVersion: String by project
-val serverReplayVersion: String by project
-
-version = "${modVersion}+mc${mcVersion}"
+val modVersion = "0.2.3"
+val releaseVersion = "${modVersion}+mc${libs.versions.minecraft.get()}"
+val mavenVersion = "${modVersion}+${libs.versions.minecraft.get()}"
+version = releaseVersion
 group = "me.senseiwells"
 
 repositories {
     mavenLocal()
+    mavenCentral()
+    maven("https://maven.supersanta.me/snapshots")
     maven("https://maven.parchmentmc.org/")
     maven("https://jitpack.io")
     maven("https://ueaj.dev/maven")
     maven("https://maven.nucleoid.xyz")
     maven("https://maven.maxhenkel.de/repository/public")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
-    mavenCentral()
 }
 
 @Suppress("UnstableApiUsage")
 dependencies {
-    minecraft("com.mojang:minecraft:${mcVersion}")
+    minecraft(libs.minecraft)
+    @Suppress("UnstableApiUsage")
     mappings(loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${parchmentVersion}@zip")
+        parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.get()}@zip")
     })
-    modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
 
-    modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    modImplementation(libs.fabric.kotlin)
 
-    include(modImplementation("eu.pb4:polymer-core:${polymerVersion}")!!)
-    include(modImplementation("eu.pb4:polymer-virtual-entity:${polymerVersion}")!!)
-    include(modImplementation("eu.pb4:placeholder-api:${placeholderVersion}")!!)
-    include(modImplementation("eu.pb4:predicate-api:${predicateApiVersion}")!!)
+    modImplementation(libs.server.replay)
 
-    include(modImplementation("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
+    includeModImplementation(libs.polymer.core)
+    includeModImplementation(libs.polymer.virtual.entity)
+    includeModImplementation(libs.placeholder)
+    includeModImplementation(libs.predicate)
 
-    modImplementation("com.github.senseiwells:ServerReplay:${serverReplayVersion}")
+    includeModImplementation(libs.permissions) {
+        exclude(libs.fabric.api.get().group)
+    }
 }
 
 loom {
     runs {
         getByName("server") {
-            runDir = "run/${mcVersion}"
+            runDir = "run/${libs.versions.minecraft.get()}"
         }
     }
+}
+
+java {
+    withSourcesJar()
 }
 
 tasks {
@@ -79,51 +78,68 @@ tasks {
         from("LICENSE")
     }
 
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                groupId = "com.github.senseiwells"
-                artifactId = "CustomNameTags"
-                version = getGitHash()
-                from(project.components.getByName("java"))
+    publishMods {
+        file = remapJar.get().archiveFile
+        changelog.set(
+            """
+            - Update to 1.21
+            """.trimIndent()
+        )
+        type = STABLE
+        modLoaders.add("fabric")
+
+        displayName = "CustomNameTags $modVersion for ${libs.versions.minecraft.get()}"
+        version = releaseVersion
+
+        modrinth {
+            accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+            projectId = "TizFPouK"
+            minecraftVersions.add(libs.versions.minecraft)
+
+            requires {
+                id = "Ha28R6CL"
+            }
+            requires {
+                id = "P7dR8mSH"
             }
         }
     }
 }
 
-java {
-    withSourcesJar()
-}
-
-publishMods {
-    file.set(tasks.remapJar.get().archiveFile)
-    changelog.set("""
-    - Update to 1.21
-	""".trimIndent())
-    type.set(STABLE)
-    modLoaders.add("fabric")
-
-    displayName.set("CustomNameTags $mcVersion v$modVersion")
-
-    modrinth {
-        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
-        projectId.set("TizFPouK")
-        minecraftVersions.add(mcVersion)
-
-        requires {
-            id.set("Ha28R6CL")
+publishing {
+    publications {
+        create<MavenPublication>("nametags") {
+            groupId = "me.senseiwells"
+            artifactId = "custom-nametags"
+            version = mavenVersion
+            from(components["java"])
         }
-        requires {
-            id.set("P7dR8mSH")
+    }
+
+    repositories {
+        val mavenUrl = System.getenv("MAVEN_URL")
+        if (mavenUrl != null) {
+            maven {
+                url = uri(mavenUrl)
+                val mavenUsername = System.getenv("MAVEN_USERNAME")
+                val mavenPassword = System.getenv("MAVEN_PASSWORD")
+                if (mavenUsername != null && mavenPassword != null) {
+                    credentials {
+                        username = mavenUsername
+                        password = mavenPassword
+                    }
+                }
+            }
         }
     }
 }
 
-fun getGitHash(): String {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "rev-parse", "HEAD")
-        standardOutput = out
-    }
-    return out.toString(Charset.defaultCharset()).trim()
+private fun DependencyHandler.includeModImplementation(dependencyNotation: Any) {
+    include(dependencyNotation)
+    modImplementation(dependencyNotation)
+}
+
+private fun DependencyHandler.includeModImplementation(provider: Provider<*>, action: Action<ExternalModuleDependency>) {
+    include(provider, action)
+    modImplementation(provider, action)
 }

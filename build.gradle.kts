@@ -13,7 +13,6 @@ plugins {
 
 val modVersion = "0.2.3"
 val releaseVersion = "${modVersion}+mc${libs.versions.minecraft.get()}"
-val mavenVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
 
@@ -111,7 +110,7 @@ publishing {
         create<MavenPublication>("nametags") {
             groupId = "me.senseiwells"
             artifactId = "custom-nametags"
-            version = mavenVersion
+            version = "${modVersion}+${libs.versions.minecraft.get()}"
             from(components["java"])
         }
     }
@@ -132,11 +131,6 @@ publishing {
             }
         }
     }
-}
-
-private fun DependencyHandler.includeModImplementation(dependencyNotation: Any) {
-    include(dependencyNotation)
-    modImplementation(dependencyNotation)
 }
 
 private fun DependencyHandler.includeModImplementation(provider: Provider<*>, action: Action<ExternalModuleDependency>) {

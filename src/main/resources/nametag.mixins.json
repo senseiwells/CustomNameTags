@@ -7,6 +7,7 @@
     "ClientboundAddEntityPacketMixin",
     "PlayerListMixin",
     "PlayerMixin",
+    "ServerboundInteractionPacketAccessor",
     "ServerGamePacketListenerImplMixin"
   ],
   "injectors": {

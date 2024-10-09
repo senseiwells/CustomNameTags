@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.2.3"
+val modVersion = "0.2.4"
 val releaseVersion = "${modVersion}+mc${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -43,10 +43,10 @@ dependencies {
 
     modImplementation(libs.server.replay)
 
-    includeModImplementation(libs.polymer.core)
-    includeModImplementation(libs.polymer.virtual.entity)
-    includeModImplementation(libs.placeholder)
-    includeModImplementation(libs.predicate)
+    includeModImplementation(libs.polymer.core) {}
+    includeModImplementation(libs.polymer.virtual.entity) {}
+    includeModImplementation(libs.placeholder) {}
+    includeModImplementation(libs.predicate) {}
 
     includeModImplementation(libs.permissions) {
         exclude(libs.fabric.api.get().group)

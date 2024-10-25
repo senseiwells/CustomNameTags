@@ -69,7 +69,14 @@ tasks {
     processResources {
         inputs.property("version", modVersion)
         filesMatching("fabric.mod.json") {
-            expand(mutableMapOf("version" to modVersion))
+            expand(mutableMapOf(
+                "version" to modVersion,
+                "fabric_loader_dependency" to libs.versions.fabric.loader.get(),
+                "fabric_kotlin_dependency" to libs.versions.fabric.kotlin.get(),
+                "minecraft_dependency" to libs.versions.minecraft.get().replaceAfterLast('.', "x"),
+                "polymer_dependency" to libs.versions.polymer.get(),
+                "placeholder_dependency" to libs.versions.placeholder.get()
+            ))
         }
     }
 
@@ -81,7 +88,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Update to 1.21
+            - Update to 1.21.3
             """.trimIndent()
         )
         type = STABLE

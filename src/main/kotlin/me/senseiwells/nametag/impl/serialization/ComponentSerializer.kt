@@ -13,7 +13,6 @@ import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.serializer
 import me.senseiwells.nametag.CustomNameTags
 import net.minecraft.core.RegistryAccess
-import net.minecraft.data.registries.VanillaRegistries
 import net.minecraft.network.chat.Component
 
 @OptIn(ExperimentalSerializationApi::class)

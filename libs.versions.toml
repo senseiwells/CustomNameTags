@@ -1,7 +1,6 @@
 [versions]
 fabric-loom          = "1.8-SNAPSHOT"
 mod-publish          = "0.7.4"
-kotlin-serialization = "1.9.21"
 minecraft            = "1.21.3"
 fabric-loader        = "0.16.5"
 parchment            = "1.21:2024.07.28"
@@ -27,5 +26,4 @@ server-replay           = { module = "me.senseiwells:server-replay"         , ve
 
 [plugins]
 fabric-loom   = { id = "fabric-loom", version.ref = "fabric-loom" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
 mod-publish   = { id = "me.modmuss50.mod-publish-plugin", version.ref = "mod-publish" }

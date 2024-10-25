@@ -11,8 +11,8 @@ plugins {
     java
 }
 
-val modVersion = "0.3.7"
-val releaseVersion = "${modVersion}+mc${libs.versions.minecraft.get()}"
+val modVersion = "0.3.8"
+val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
 
@@ -43,9 +43,9 @@ dependencies {
 
     modCompileOnly(libs.server.replay)
 
-    includeModImplementation(libs.polymer.core) {}
-    includeModImplementation(libs.polymer.virtual.entity) {}
-    includeModImplementation(libs.placeholder) {}
+    modImplementation(libs.polymer.core)
+    modImplementation(libs.polymer.virtual.entity)
+    modImplementation(libs.placeholder)
     includeModImplementation(libs.predicate) {}
 
     includeModImplementation(libs.permissions) {
@@ -101,6 +101,12 @@ tasks {
             requires {
                 id = "P7dR8mSH"
             }
+            requires {
+                id = "xGdtZczs"
+            }
+            requires {
+                id = "eXts2L7r"
+            }
         }
     }
 }
@@ -108,9 +114,7 @@ tasks {
 publishing {
     publications {
         create<MavenPublication>("nametags") {
-            groupId = "me.senseiwells"
             artifactId = "custom-nametags"
-            version = "${modVersion}+${libs.versions.minecraft.get()}"
             from(components["java"])
         }
     }

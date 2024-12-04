@@ -1,29 +1,29 @@
 [versions]
-fabric-loom          = "1.8-SNAPSHOT"
-mod-publish          = "0.7.4"
-minecraft            = "1.21.3"
-fabric-loader        = "0.16.5"
-parchment            = "1.21:2024.07.28"
-fabric-api           = "0.106.1+1.21.3"
-fabric-kotlin        = "1.11.0+kotlin.2.0.0"
-polymer              = "0.10.2+1.21.3"
-placeholder          = "2.5.0+1.21.2"
-predicate            = "0.6.0+1.21.2"
-server-replay        = "1.1.2+1.21.1"
-permissions          = "0.3.2"
+fabric-loom   = "1.8-SNAPSHOT"
+mod-publish   = "0.7.4"
+minecraft     = "1.21.3"
+fabric-loader = "0.16.5"
+parchment     = "1.21:2024.07.28"
+fabric-api    = "0.106.1+1.21.3"
+fabric-kotlin = "1.11.0+kotlin.2.0.0"
+polymer       = "0.10.2+1.21.3"
+placeholder   = "2.5.0+1.21.2"
+predicate     = "0.6.0+1.21.2"
+server-replay = "1.1.2+1.21.1"
+permissions   = "0.3.2"
 
 [libraries]
-minecraft               = { module = "com.mojang:minecraft"                 , version.ref = "minecraft" }
-fabric-loader           = { module = "net.fabricmc:fabric-loader"           , version.ref = "fabric-loader" }
-fabric-api              = { module = "net.fabricmc.fabric-api:fabric-api"   , version.ref = "fabric-api" }
-fabric-kotlin           = { module = "net.fabricmc:fabric-language-kotlin"  , version.ref = "fabric-kotlin" }
-permissions             = { module = "me.lucko:fabric-permissions-api"      , version.ref = "permissions" }
-polymer-core            = { module = "eu.pb4:polymer-core"                  , version.ref = "polymer" }
-polymer-virtual-entity  = { module = "eu.pb4:polymer-virtual-entity"        , version.ref = "polymer" }
-placeholder             = { module = "eu.pb4:placeholder-api"               , version.ref = "placeholder" }
-predicate               = { module = "eu.pb4:predicate-api"                 , version.ref = "predicate" }
-server-replay           = { module = "me.senseiwells:server-replay"         , version.ref = "server-replay" }
+minecraft              = { module = "com.mojang:minecraft"                 , version.ref = "minecraft" }
+fabric-loader          = { module = "net.fabricmc:fabric-loader"           , version.ref = "fabric-loader" }
+fabric-api             = { module = "net.fabricmc.fabric-api:fabric-api"   , version.ref = "fabric-api" }
+fabric-kotlin          = { module = "net.fabricmc:fabric-language-kotlin"  , version.ref = "fabric-kotlin" }
+permissions            = { module = "me.lucko:fabric-permissions-api"      , version.ref = "permissions" }
+polymer-core           = { module = "eu.pb4:polymer-core"                  , version.ref = "polymer" }
+polymer-virtual-entity = { module = "eu.pb4:polymer-virtual-entity"        , version.ref = "polymer" }
+placeholder            = { module = "eu.pb4:placeholder-api"               , version.ref = "placeholder" }
+predicate              = { module = "eu.pb4:predicate-api"                 , version.ref = "predicate" }
+server-replay          = { module = "me.senseiwells:server-replay"         , version.ref = "server-replay" }
 
 [plugins]
-fabric-loom   = { id = "fabric-loom", version.ref = "fabric-loom" }
-mod-publish   = { id = "me.modmuss50.mod-publish-plugin", version.ref = "mod-publish" }
+fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
+mod-publish = { id = "me.modmuss50.mod-publish-plugin", version.ref = "mod-publish" }

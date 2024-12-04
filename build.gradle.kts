@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.3.0"
+val modVersion = "0.3.1"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -86,7 +86,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Update to 1.21.3
+            - Update to 1.21.4
             """.trimIndent()
         )
         type = STABLE

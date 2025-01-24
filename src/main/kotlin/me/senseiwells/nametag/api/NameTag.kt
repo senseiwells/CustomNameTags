@@ -25,6 +25,7 @@ interface NameTag {
     /**
      * Whether the name tag should be visible through walls (when not sneaking).
      */
+    @Deprecated("Replace with isVisibleThroughWalls", ReplaceWith("this.isVisibleThroughWalls()"))
     val visibleThroughWalls: Boolean
         get() = true
 
@@ -55,4 +56,26 @@ interface NameTag {
      * @return Whether the nametag should be visible.
      */
     fun isObservable(observee: Entity, observer: ServerPlayer): Boolean
+
+    /**
+     * This method determines whether the [observee] is within range of the [observer]
+     *
+     * @param observee The entity whose nametag is being observed.
+     * @param observer The player observing the nametag.
+     * @return Whether the entity is in range.
+     */
+    fun isWithinRange(observee: Entity, observer: ServerPlayer): Boolean {
+        return true
+    }
+
+    /**
+     * Whether the name tag should be visible through walls (when not sneaking).
+     *
+     * @param observee The observee whose nametag is visible or not.
+     * @return Whether the nametag should be visible or not.
+     */
+    fun isVisibleThroughWalls(observee: Entity): Boolean {
+        @Suppress("DEPRECATION")
+        return this.visibleThroughWalls
+    }
 }

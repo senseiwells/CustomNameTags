@@ -9,7 +9,7 @@ fabric-kotlin = "1.13.0+kotlin.2.1.0"
 polymer       = "0.11.0+1.21.4-rc1"
 placeholder   = "2.5.1+1.21.3"
 predicate     = "0.6.0+1.21.2"
-server-replay = "1.2.6+1.21.4"
+server-replay = "1.2.11+1.21.4"
 permissions   = "0.3.3"
 
 [libraries]

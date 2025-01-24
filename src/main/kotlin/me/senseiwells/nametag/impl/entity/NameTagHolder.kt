@@ -12,13 +12,14 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.network.ServerGamePacketListenerImpl
 import net.minecraft.world.entity.Entity
+import org.jetbrains.annotations.ApiStatus.OverrideOnly
 import java.util.function.Consumer
 
-class NameTagHolder(
+open class NameTagHolder(
     private val owner: () -> Entity
 ): ElementHolder() {
-    private val nametags = Object2ObjectLinkedOpenHashMap<NameTag, NameTagElement>()
-    private val watching = Object2ObjectLinkedOpenHashMap<ServerGamePacketListenerImpl, MutableSet<NameTagElement>>()
+    protected val nametags = Object2ObjectLinkedOpenHashMap<NameTag, NameTagElement>()
+    protected val watching = Object2ObjectLinkedOpenHashMap<ServerGamePacketListenerImpl, MutableSet<NameTagElement>>()
 
     val entity: Entity
         get() = this.owner()
@@ -28,6 +29,7 @@ class NameTagHolder(
         this.nametags[tag] = element
         // Manually call the first update
         element.update()
+        this.onAdd(element)
     }
 
     fun remove(tag: NameTag) {
@@ -39,6 +41,7 @@ class NameTagHolder(
             watching?.remove(element)
             this.resendNameTagStackFor(watching ?: listOf(), connection::send)
         }
+        this.onRemove(element)
     }
 
     fun removeAll() {
@@ -49,6 +52,7 @@ class NameTagHolder(
         }
         this.watching.clear()
         this.nametags.clear()
+        this.onRemoveAll()
     }
 
     fun sneak() {
@@ -63,12 +67,17 @@ class NameTagHolder(
         }
     }
 
-    fun isNameTagVisibleTo(tag: NameTag, player: ServerPlayer): Boolean {
+    @Suppress("unused")
+    fun firstNametag(): NameTagElement? {
+        return this.nametags.values.firstOrNull()
+    }
+
+    open fun isNameTagVisibleTo(tag: NameTag, player: ServerPlayer): Boolean {
         val element = this.nametags[tag] ?: return false
         return element.watching.contains(player.connection)
     }
 
-    fun resendNamesTagTo(player: ServerPlayer, consumer: Consumer<Packet<ClientGamePacketListener>>) {
+    open fun resendNamesTagTo(player: ServerPlayer, consumer: Consumer<Packet<ClientGamePacketListener>>) {
         val elements = this.watching[player.connection] ?: return
         for (element in elements) {
             element.sendSpawnPackets(consumer)
@@ -107,7 +116,24 @@ class NameTagHolder(
         }
     }
 
-    private fun updateWatcher(connection: ServerGamePacketListenerImpl) {
+    @OverrideOnly
+    open fun onSendDirtyPacket(element: NameTagElement, packet: Packet<*>) {
+
+    }
+
+    protected open fun onAdd(element: NameTagElement) {
+
+    }
+
+    protected open fun onRemove(element: NameTagElement) {
+
+    }
+
+    protected open fun onRemoveAll() {
+
+    }
+
+    protected fun updateWatcher(connection: ServerGamePacketListenerImpl) {
         val elements = this.watching.getOrPut(connection, ::ObjectLinkedOpenHashSet)
 
         var dirty = false
@@ -117,7 +143,8 @@ class NameTagHolder(
             // This checks if the player is visible to our watcher
             val canWatch = this.entity.broadcastToPlayer(connection.player) &&
                 !this.entity.isInvisible &&
-                element.tag.isObservable(this.entity, connection.player)
+                element.tag.isObservable(this.entity, connection.player) &&
+                element.tag.isWithinRange(this.entity, connection.player)
 
             if (watching) {
                 if (!canWatch) {
@@ -140,7 +167,7 @@ class NameTagHolder(
     }
 
     // This function resends all the riding positions of each entity
-    private fun resendNameTagStackFor(
+    protected fun resendNameTagStackFor(
         watching: Collection<NameTagElement>,
         consumer: Consumer<Packet<ClientGamePacketListener>>
     ) {
@@ -172,5 +199,9 @@ class NameTagHolder(
         if (entities.isNotEmpty()) {
             consumer.accept(VirtualEntityUtils.createRidePacket(previous, entities))
         }
+    }
+
+    fun interface Provider {
+        fun create(owner: () -> Entity): NameTagHolder
     }
 }

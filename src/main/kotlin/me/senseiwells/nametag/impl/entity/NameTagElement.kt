@@ -28,6 +28,7 @@ class NameTagElement(
     private val foreground = TextDisplayElement()
 
     private var ticks = 0
+    private var sneaking = false
 
     private val entity: Entity
         get() = this.owner.entity
@@ -38,7 +39,7 @@ class NameTagElement(
         this.initialiseDisplay(this.background)
         this.initialiseDisplay(this.foreground)
 
-        this.background.seeThrough = this.tag.visibleThroughWalls
+        this.background.seeThrough = this.tag.isVisibleThroughWalls(this.entity)
         this.background.textOpacity = 30.toByte()
         this.foreground.seeThrough = false
         this.foreground.textOpacity = 255.toByte()
@@ -52,15 +53,17 @@ class NameTagElement(
         this.foreground.textOpacity = -127
 
         this.sendDirtyPackets()
+        this.sneaking = true
     }
 
     fun unsneak() {
         // When the player un-sneaks, we return to default
-        this.background.seeThrough = this.tag.visibleThroughWalls
+        this.background.seeThrough = this.tag.isVisibleThroughWalls(this.entity)
         // Not sure why 255 is required here, 128 doesn't work.
         this.foreground.textOpacity = 255.toByte()
 
         this.sendDirtyPackets()
+        this.sneaking = false
     }
 
     fun update() {
@@ -68,11 +71,18 @@ class NameTagElement(
         this.foreground.text = text
         this.background.text = text
 
+        this.background.seeThrough = !this.sneaking && this.tag.isVisibleThroughWalls(this.entity)
+
         this.sendDirtyPackets()
     }
 
     fun getTagEntityIds(): IntList {
         return IntList.of(this.foreground.entityId, this.background.entityId)
+    }
+
+    @Suppress("unused")
+    fun getShiftId(): Int {
+        return this.shift.id
     }
 
     private fun initialiseDisplay(display: TextDisplayElement) {
@@ -122,7 +132,9 @@ class NameTagElement(
             display.entityId,
             display.uuid,
             this.entity.x,
-            this.entity.y,
+            // We spawn the entity so low that the lerp animation
+            // happens so fast it's basically instant
+            this.entity.y - 500,
             this.entity.z,
             display.pitch,
             display.yaw,
@@ -145,6 +157,8 @@ class NameTagElement(
             for (watcher in this.watching) {
                 watcher.send(packet)
             }
+
+            this.owner.onSendDirtyPacket(this, packet)
         }
     }
 }

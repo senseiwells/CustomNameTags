@@ -2,7 +2,7 @@
 fabric-loom   = "1.8-SNAPSHOT"
 mod-publish   = "0.7.4"
 minecraft     = "1.21.3"
-fabric-loader = "0.16.5"
+fabric-loader = "0.16.9"
 parchment     = "1.21:2024.07.28"
 fabric-api    = "0.106.1+1.21.3"
 fabric-kotlin = "1.11.0+kotlin.2.0.0"

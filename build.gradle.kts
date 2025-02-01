@@ -24,6 +24,7 @@ repositories {
     maven("https://jitpack.io")
     maven("https://maven.nucleoid.xyz")
     maven("https://maven.andante.dev/releases/")
+    maven("https://maven.maxhenkel.de/repository/public")
 }
 
 @Suppress("UnstableApiUsage")

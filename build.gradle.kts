@@ -87,7 +87,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            Fix compatability with fsit
+            Backport all fixes from 1.21.4
             """.trimIndent()
         )
         type = STABLE

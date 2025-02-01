@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.3.3"
+val modVersion = "0.3.4"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -86,7 +86,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Updated internal apis
+            Fix compatability with fsit
             """.trimIndent()
         )
         type = STABLE

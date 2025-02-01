@@ -2,6 +2,7 @@ package me.senseiwells.nametag.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Cancellable;
+import me.senseiwells.nametag.CustomNameTags;
 import me.senseiwells.nametag.NameTagHolderExtension;
 import me.senseiwells.nametag.impl.entity.NameTagHolder;
 import me.senseiwells.nametag.impl.entity.NameTagInteractionBypass;
@@ -18,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ServerGamePacketListenerImplMixin implements NameTagHolderExtension {
-	@Unique private final NameTagHolder nametag$holder = new NameTagHolder(() -> this.player);
+	@Unique private final NameTagHolder nametag$holder = CustomNameTags.createHolder(() -> this.player);
 
 	@Shadow public ServerPlayer player;
 

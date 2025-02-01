@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.3.0"
+val modVersion = "0.3.4"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -41,8 +41,8 @@ dependencies {
 
     modCompileOnly(libs.server.replay)
 
-    modImplementation(libs.polymer.core)
-    modImplementation(libs.polymer.virtual.entity)
+    modApi(libs.polymer.core)
+    modApi(libs.polymer.virtual.entity)
     modImplementation(libs.placeholder)
     includeModImplementation(libs.predicate) {}
 
@@ -86,7 +86,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Update to 1.21.3
+            Fix compatability with fsit
             """.trimIndent()
         )
         type = STABLE

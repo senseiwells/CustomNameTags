@@ -143,6 +143,7 @@ open class NameTagHolder(
             // This checks if the player is visible to our watcher
             val canWatch = this.entity.broadcastToPlayer(connection.player) &&
                 !this.entity.isInvisible &&
+                this.entity.passengers.isEmpty() &&
                 element.tag.isObservable(this.entity, connection.player) &&
                 element.tag.isWithinRange(this.entity, connection.player)
 
@@ -171,6 +172,9 @@ open class NameTagHolder(
         watching: Collection<NameTagElement>,
         consumer: Consumer<Packet<ClientGamePacketListener>>
     ) {
+        for (element in this.nametags.values) {
+            VirtualEntityUtils.removeVirtualPassenger(this.entity, element.shift.id)
+        }
         if (watching.isEmpty()) {
             return
         }
@@ -189,6 +193,9 @@ open class NameTagHolder(
             val current = element.shift.id
             entities.add(current)
             consumer.accept(VirtualEntityUtils.createRidePacket(previous, entities))
+            if (previous == this.entity.id) {
+                VirtualEntityUtils.addVirtualPassenger(this.entity, *entities.toIntArray())
+            }
             entities.clear()
 
             entities.addAll(element.getTagEntityIds())

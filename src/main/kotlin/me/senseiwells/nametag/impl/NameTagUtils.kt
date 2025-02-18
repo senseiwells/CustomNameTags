@@ -1,11 +1,13 @@
 package me.senseiwells.nametag.impl
 
+import eu.pb4.polymer.virtualentity.api.VirtualEntityUtils
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment
 import me.senseiwells.nametag.NameTagHolderExtension
 import me.senseiwells.nametag.api.NameTag
 import me.senseiwells.nametag.impl.entity.NameTagHolder
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket
 import net.minecraft.server.level.ServerPlayer
 import org.jetbrains.annotations.ApiStatus.Internal
 import java.util.function.Consumer
@@ -56,5 +58,20 @@ object NameTagUtils {
     @JvmStatic
     fun respawnNameTags(player: ServerPlayer) {
         EntityAttachment.ofTicking(player.nameTagHolder, player)
+    }
+
+    @Internal
+    @JvmStatic
+    fun modifyPassengersPacket(
+        observer: ServerPlayer,
+        packet: ClientboundSetPassengersPacket
+    ): ClientboundSetPassengersPacket {
+        val holder = when (val vehicle = observer.serverLevel().getEntity(packet.vehicle)) {
+            is ServerPlayer -> vehicle.nameTagHolder
+            is NameTagHolderExtension -> vehicle.`nametag$getHolder`()
+            else -> return packet
+        }
+        val cached = holder.getCachedIdsFor(observer) ?: return packet
+        return VirtualEntityUtils.createRidePacket(packet.vehicle, packet.passengers + cached)
     }
 }

@@ -39,6 +39,12 @@ class PlaceholderNameTag(
     @SerialName("visible_through_walls")
     @EncodeDefault(Mode.NEVER)
     override val visibleThroughWalls: Boolean = true,
+    @SerialName("visible_when_observee_invisible")
+    @EncodeDefault(Mode.NEVER)
+    val visibleWhenObserveeInvisible: Boolean = false,
+    @SerialName("visible_with_passengers")
+    @EncodeDefault(Mode.NEVER)
+    val visibleWithPassengers: Boolean = false,
     @SerialName("shift_height")
     @EncodeDefault(Mode.NEVER)
     val shiftHeight: ShiftHeight = ShiftHeight.SMALL,
@@ -62,6 +68,12 @@ class PlaceholderNameTag(
     }
 
     override fun isObservable(observee: Entity, observer: ServerPlayer): Boolean {
+        if (observee.isInvisibleTo(observer) && !this.visibleWhenObserveeInvisible) {
+            return false
+        }
+        if (observee.passengers.isNotEmpty() && !this.visibleWithPassengers) {
+            return false
+        }
         val result = this.observee?.test(PredicateContext.of(observee))?.success ?: true
         return result && (this.observer?.test(PredicateContext.of(observer))?.success ?: true)
     }

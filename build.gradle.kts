@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.3.4"
+val modVersion = "0.3.5"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -86,7 +86,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            Fix compatability with fsit
+            Fix a bug where nametags would sometimes dismount the player
             """.trimIndent()
         )
         type = STABLE

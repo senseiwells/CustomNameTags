@@ -2,6 +2,7 @@ package me.senseiwells.nametag.impl.entity
 
 import eu.pb4.polymer.virtualentity.api.ElementHolder
 import eu.pb4.polymer.virtualentity.api.VirtualEntityUtils
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet
@@ -9,6 +10,7 @@ import me.senseiwells.nametag.api.NameTag
 import me.senseiwells.nametag.impl.ShiftHeight
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.network.ServerGamePacketListenerImpl
 import net.minecraft.world.entity.Entity
@@ -20,6 +22,7 @@ open class NameTagHolder(
 ): ElementHolder() {
     protected val nametags = Object2ObjectLinkedOpenHashMap<NameTag, NameTagElement>()
     protected val watching = Object2ObjectLinkedOpenHashMap<ServerGamePacketListenerImpl, MutableSet<NameTagElement>>()
+    protected val cached = Int2ObjectOpenHashMap<IntArray>()
 
     val entity: Entity
         get() = this.owner()
@@ -39,7 +42,7 @@ open class NameTagHolder(
             element.sendRemovePackets(connection::send)
             val watching = this.watching[connection]
             watching?.remove(element)
-            this.resendNameTagStackFor(watching ?: listOf(), connection::send)
+            this.resendNameTagStackFor(watching ?: listOf(), connection.player, connection::send)
         }
         this.onRemove(element)
     }
@@ -82,7 +85,7 @@ open class NameTagHolder(
         for (element in elements) {
             element.sendSpawnPackets(consumer)
         }
-        this.resendNameTagStackFor(elements, consumer)
+        this.resendNameTagStackFor(elements, player, consumer)
     }
 
     override fun startWatching(connection: ServerGamePacketListenerImpl): Boolean {
@@ -95,6 +98,7 @@ open class NameTagHolder(
 
     override fun stopWatching(connection: ServerGamePacketListenerImpl): Boolean {
         if (super.stopWatching(connection)) {
+            this.cached.remove(connection.player.id)
             val watching = this.watching.remove(connection)
             if (watching != null) {
                 for (element in watching) {
@@ -142,8 +146,6 @@ open class NameTagHolder(
 
             // This checks if the player is visible to our watcher
             val canWatch = this.entity.broadcastToPlayer(connection.player) &&
-                !this.entity.isInvisible &&
-                this.entity.passengers.isEmpty() &&
                 element.tag.isObservable(this.entity, connection.player) &&
                 element.tag.isWithinRange(this.entity, connection.player)
 
@@ -163,22 +165,21 @@ open class NameTagHolder(
         }
 
         if (dirty) {
-            this.resendNameTagStackFor(elements, connection::send)
+            this.resendNameTagStackFor(elements, connection.player, connection::send)
         }
     }
 
     // This function resends all the riding positions of each entity
     protected fun resendNameTagStackFor(
         watching: Collection<NameTagElement>,
+        observee: ServerPlayer,
         consumer: Consumer<Packet<ClientGamePacketListener>>
     ) {
-        for (element in this.nametags.values) {
-            VirtualEntityUtils.removeVirtualPassenger(this.entity, element.shift.id)
-        }
         if (watching.isEmpty()) {
             return
         }
 
+        val ridden = Int2ObjectOpenHashMap<IntArray>()
         var previous = this.entity.id
         var shift = ShiftHeight.DEFAULT
         val entities = IntArrayList()
@@ -192,10 +193,7 @@ open class NameTagHolder(
             // We shift the nametag up by our shift
             val current = element.shift.id
             entities.add(current)
-            consumer.accept(VirtualEntityUtils.createRidePacket(previous, entities))
-            if (previous == this.entity.id) {
-                VirtualEntityUtils.addVirtualPassenger(this.entity, *entities.toIntArray())
-            }
+            ridden.put(previous, entities.toIntArray())
             entities.clear()
 
             entities.addAll(element.getTagEntityIds())
@@ -203,9 +201,23 @@ open class NameTagHolder(
             shift = element.tag.getShift()
         }
 
+        val own = ridden.remove(this.entity.id)
+            ?: throw IllegalStateException("Name tag owner expected to have visible nametags")
+
+        this.cached.put(observee.id, own)
+
+        consumer.accept(ClientboundSetPassengersPacket(this.entity))
+
+        for (entry in ridden.int2ObjectEntrySet()) {
+            consumer.accept(VirtualEntityUtils.createRidePacket(entry.intKey, entities.elements()))
+        }
         if (entities.isNotEmpty()) {
             consumer.accept(VirtualEntityUtils.createRidePacket(previous, entities))
         }
+    }
+
+    internal fun getCachedIdsFor(observee: ServerPlayer): IntArray? {
+        return this.cached.get(observee.id)
     }
 
     fun interface Provider {

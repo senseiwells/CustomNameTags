@@ -5,6 +5,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import me.senseiwells.nametag.CustomNameTags
@@ -22,7 +23,8 @@ import kotlin.io.path.outputStream
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 class NameTagConfig(
-    @SerialName("name_tags")
+    @JsonNames("name_tags")
+    @SerialName("nametags")
     @Serializable(with = NameTagsSerializer::class)
     val nametags: Object2ObjectLinkedOpenHashMap<SerializableResourceLocation, PlaceholderNameTag> = Object2ObjectLinkedOpenHashMap()
 ) {

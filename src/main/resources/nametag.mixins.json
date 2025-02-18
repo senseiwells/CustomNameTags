@@ -8,6 +8,7 @@
     "PlayerListMixin",
     "PlayerMixin",
     "ServerboundInteractionPacketAccessor",
+    "ServerCommonPacketListenerImplMixin",
     "ServerGamePacketListenerImplMixin"
   ],
   "injectors": {

@@ -1,8 +1,9 @@
 package me.senseiwells.nametag;
 
 import me.senseiwells.nametag.impl.entity.NameTagHolder;
+import org.jetbrains.annotations.Nullable;
 
 public interface NameTagHolderExtension {
 	@SuppressWarnings("unused")
-	NameTagHolder nametag$getHolder();
+	@Nullable NameTagHolder nametag$getHolder();
 }

@@ -14,7 +14,7 @@ import java.util.function.Consumer
 
 object NameTagUtils {
     private val ServerPlayer.nameTagHolder: NameTagHolder
-        get() = (this.connection as NameTagHolderExtension).`nametag$getHolder`()
+        get() = (this.connection as NameTagHolderExtension).`nametag$getHolder`()!!
 
     @JvmStatic
     fun ServerPlayer.addNameTag(tag: NameTag) {
@@ -71,7 +71,7 @@ object NameTagUtils {
             is NameTagHolderExtension -> vehicle.`nametag$getHolder`()
             else -> return packet
         }
-        val cached = holder.getCachedIdsFor(observer) ?: return packet
+        val cached = holder?.getCachedIdsFor(observer) ?: return packet
         return VirtualEntityUtils.createRidePacket(packet.vehicle, packet.passengers + cached)
     }
 }

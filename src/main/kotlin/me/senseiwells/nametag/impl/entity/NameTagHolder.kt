@@ -209,7 +209,7 @@ open class NameTagHolder(
         consumer.accept(ClientboundSetPassengersPacket(this.entity))
 
         for (entry in ridden.int2ObjectEntrySet()) {
-            consumer.accept(VirtualEntityUtils.createRidePacket(entry.intKey, entities.elements()))
+            consumer.accept(VirtualEntityUtils.createRidePacket(entry.intKey, entry.value))
         }
         if (entities.isNotEmpty()) {
             consumer.accept(VirtualEntityUtils.createRidePacket(previous, entities))

@@ -107,17 +107,18 @@ which means you can add contextual data.
 For example `"%player:displayname"` which will insert the display name of the current player. 
 For all the details reference the [placeholder api](https://placeholders.pb4.eu/user/default-placeholders/).
 
-#### `"view_radius"`
+#### `"visible_radius"`, `"hide_radius"`
 
-This specifies a radius (in blocks) at which the nametag will be visible to other players.
+This two settings specify a range where the nametag will be visible to other players.
 
-Set this to a negative value to have an unbounded view radius.
+Setting to a negative value to disable it.
 
-For example, if you only wanted players within a 10.7 block radius to see eachothers nametags you can set:
+For example, if you only wanted players in range from 5.3 to a 10.7 block radius to see eachothers nametags you can set:
 ```json5
 {
   // ...
-  "view_radius": 10.7,
+  "hide_radius": 5.3,
+  "visible_radius": 10.7,
   // ...
 }
 ```

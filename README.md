@@ -31,7 +31,7 @@ The above image used the following configuration:
 
 ```json
 {
-  "name_tags": [
+  "nametags": [
     {
       "id": "example:admin_name",
       "update_interval": -1,
@@ -76,13 +76,11 @@ The above image used the following configuration:
     {
       "id": "example:data",
       "update_interval": 1,
-      "literal": "%player:health%♥ 20🍖 %player:statistic minecraft:killed minecraft:player%⚔ %player:statistic minecraft:deaths%\uD83D\uDC80"
+      "literal": "%player:health%♥ %player:hunger%🍖 %player:statistic minecraft:killed minecraft:player%⚔ %player:statistic minecraft:deaths%\uD83D\uDC80"
     }
   ]
 }
 ```
-* Note about the example above `"%player:hunger%"` is supposed to come after the player health,
-however due to a bug in the playerholder api this is not working correctly for the time being.
 
 ### Creating a Nametag
 

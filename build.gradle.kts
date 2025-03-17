@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.3.7"
+val modVersion = "0.4.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -86,7 +86,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            Fix incorrectly stacked nametags
+            Add new `"hidden_radius"` nametag option to make nametags disappear within a certain radius.
             """.trimIndent()
         )
         type = STABLE

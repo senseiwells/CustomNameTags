@@ -35,6 +35,8 @@ class PlaceholderNameTag(
     override val updateInterval: Int = 1,
     @SerialName("visible_radius")
     val visibleRadius: Double = -1.0,
+    @SerialName("hidden_radius")
+    val hiddenRadius: Double = -1.0,
     @Suppress("OVERRIDE_DEPRECATION")
     @SerialName("visible_through_walls")
     @EncodeDefault(Mode.NEVER)
@@ -79,7 +81,14 @@ class PlaceholderNameTag(
     }
 
     override fun isWithinRange(observee: Entity, observer: ServerPlayer): Boolean {
-        return this.visibleRadius < 0 || observee.distanceToSqr(observer) < (this.visibleRadius * this.visibleRadius)
+        val distance = observee.distanceToSqr(observer)
+        if (this.hiddenRadius >= 0 && distance < this.hiddenRadius * this.hiddenRadius) {
+            return false
+        }
+        if (this.visibleRadius >= 0 && distance > this.visibleRadius * this.visibleRadius) {
+            return false
+        }
+        return true
     }
 
     companion object {

@@ -22,6 +22,11 @@ object NameTagUtils {
     }
 
     @JvmStatic
+    fun ServerPlayer.getNameTags(): Collection<NameTag> {
+        return this.nameTagHolder.nametags()
+    }
+
+    @JvmStatic
     fun ServerPlayer.removeNameTag(tag: NameTag) {
         this.nameTagHolder.remove(tag)
     }

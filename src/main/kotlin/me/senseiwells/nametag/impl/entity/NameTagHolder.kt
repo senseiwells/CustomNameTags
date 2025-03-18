@@ -70,6 +70,10 @@ open class NameTagHolder(
         }
     }
 
+    fun nametags(): Collection<NameTag> {
+        return this.nametags.keys
+    }
+
     @Suppress("unused")
     fun firstNametag(): NameTagElement? {
         return this.nametags.values.firstOrNull()

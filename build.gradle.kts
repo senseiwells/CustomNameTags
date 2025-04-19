@@ -86,7 +86,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            Add new `"hidden_radius"` nametag option to make nametags disappear within a certain radius.
+            Updated to 1.21.5
             """.trimIndent()
         )
         type = STABLE

@@ -15,7 +15,6 @@ import me.senseiwells.nametag.CustomNameTags
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.chat.Component
 
-@OptIn(ExperimentalSerializationApi::class)
 object ComponentSerializer: KSerializer<Component> {
     override val descriptor: SerialDescriptor = SerialDescriptor("TextSerializer", serializer<JsonElement>().descriptor)
 

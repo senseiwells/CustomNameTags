@@ -11,7 +11,6 @@ import kotlinx.serialization.serializer
 import me.senseiwells.nametag.impl.PlaceholderNameTag
 import net.minecraft.resources.ResourceLocation
 
-@OptIn(ExperimentalSerializationApi::class)
 object NameTagsSerializer: KSerializer<Object2ObjectLinkedOpenHashMap<ResourceLocation, PlaceholderNameTag>> {
     private val serializer = ListSerializer(serializer<PlaceholderNameTag>())
 

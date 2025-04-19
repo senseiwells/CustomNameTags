@@ -44,7 +44,7 @@ object NameTagCommand {
 
     private fun createNameTag(context: CommandContext<CommandSourceStack>): Int {
         val id = ResourceLocationArgument.getId(context, "identifier")
-        val literal = ComponentArgument.getComponent(context, "text")
+        val literal = ComponentArgument.getRawComponent(context, "text")
 
         if (CustomNameTags.config.nametags.containsKey(id)) {
             throw TAG_ALREADY_EXISTS.create()

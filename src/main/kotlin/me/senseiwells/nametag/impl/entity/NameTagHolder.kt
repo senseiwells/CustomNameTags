@@ -27,6 +27,9 @@ open class NameTagHolder(
     val entity: Entity
         get() = this.owner()
 
+    open val mounted: Boolean
+        get() = true
+
     fun add(tag: NameTag) {
         val element = NameTagElement(this, tag)
         this.nametags[tag] = element
@@ -77,6 +80,10 @@ open class NameTagHolder(
     @Suppress("unused")
     fun firstNametag(): NameTagElement? {
         return this.nametags.values.firstOrNull()
+    }
+
+    fun getCachedIdsFor(observee: ServerPlayer): IntArray? {
+        return this.cached.get(observee.id)
     }
 
     open fun isNameTagVisibleTo(tag: NameTag, player: ServerPlayer): Boolean {
@@ -141,7 +148,7 @@ open class NameTagHolder(
 
     }
 
-    protected fun updateWatcher(connection: ServerGamePacketListenerImpl) {
+    protected open fun updateWatcher(connection: ServerGamePacketListenerImpl) {
         val elements = this.watching.getOrPut(connection, ::ObjectLinkedOpenHashSet)
 
         var dirty = false
@@ -174,9 +181,9 @@ open class NameTagHolder(
     }
 
     // This function resends all the riding positions of each entity
-    protected fun resendNameTagStackFor(
+    protected open fun resendNameTagStackFor(
         watching: Collection<NameTagElement>,
-        observee: ServerPlayer,
+        observer: ServerPlayer,
         consumer: Consumer<Packet<ClientGamePacketListener>>
     ) {
         if (watching.isEmpty()) {
@@ -208,7 +215,7 @@ open class NameTagHolder(
         val own = ridden.remove(this.entity.id)
             ?: throw IllegalStateException("Name tag owner expected to have visible nametags")
 
-        this.cached.put(observee.id, own)
+        this.cached.put(observer.id, own)
 
         consumer.accept(ClientboundSetPassengersPacket(this.entity))
 
@@ -218,10 +225,6 @@ open class NameTagHolder(
         if (entities.isNotEmpty()) {
             consumer.accept(VirtualEntityUtils.createRidePacket(previous, entities))
         }
-    }
-
-    internal fun getCachedIdsFor(observee: ServerPlayer): IntArray? {
-        return this.cached.get(observee.id)
     }
 
     fun interface Provider {

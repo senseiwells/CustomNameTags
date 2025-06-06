@@ -8,7 +8,6 @@ import me.senseiwells.nametag.api.NameTag
 import me.senseiwells.nametag.impl.entity.NameTagHolder
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
-import net.minecraft.network.protocol.game.ClientboundBundlePacket
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket
 import net.minecraft.server.level.ServerPlayer
 import org.jetbrains.annotations.ApiStatus.Internal
@@ -77,8 +76,13 @@ object NameTagUtils {
             is ServerPlayer -> vehicle.nameTagHolder
             is NameTagHolderExtension -> vehicle.`nametag$getHolder`()
             else -> return packet
+        } ?: return packet
+
+        if (!holder.mounted) {
+            return packet
         }
-        val cached = holder?.getCachedIdsFor(observer) ?: return packet
+
+        val cached = holder.getCachedIdsFor(observer) ?: return packet
         val replacement = VirtualEntityUtils.createRidePacket(packet.vehicle, packet.passengers + cached)
         EntityAttachedPacket.setIfEmpty(replacement, EntityAttachedPacket.get(packet))
         return replacement

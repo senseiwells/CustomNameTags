@@ -1,5 +1,6 @@
 package me.senseiwells.nametag.impl.predicate
 
+import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import eu.pb4.predicate.api.AbstractPredicate
@@ -16,11 +17,13 @@ class UUIDPredicate(val uuid: UUID): AbstractPredicate(ID, CODEC) {
     }
 
     companion object {
+        private val UUID_CODEC = Codec.withAlternative(UUIDUtil.STRING_CODEC, UUIDUtil.CODEC)
+
         val ID: ResourceLocation = ResourceLocation.withDefaultNamespace("uuid")
 
         val CODEC: MapCodec<UUIDPredicate> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                UUIDUtil.LENIENT_CODEC.fieldOf("uuid").forGetter(UUIDPredicate::uuid)
+                UUID_CODEC.fieldOf("uuid").forGetter(UUIDPredicate::uuid)
             ).apply(instance, ::UUIDPredicate)
         }
     }

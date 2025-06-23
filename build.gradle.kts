@@ -94,6 +94,7 @@ tasks {
         changelog.set(
             """
             - Updated to 1.21.6
+            - Added custom `player_name` and `uuid` predicates for convenience
             """.trimIndent()
         )
         type = STABLE

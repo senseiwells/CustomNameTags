@@ -133,6 +133,24 @@ This uses the [predicate api](https://github.com/Patbox/PredicateAPI/blob/1.20.2
 you can view the documentation for more details about what predicates you
 can define.
 
+This mod also adds a couple custom predicates for convenience:
+
+A UUID predicate, which matches a player's uuid:
+```json5
+{
+  "type": "uuid",
+  "uuid": "d4fca8c4-e083-4300-9a73-bf438847861c"
+}
+```
+
+A username predicate, which matches a player's username:
+```json5
+{
+  "type": "player_name",
+  "name": "senseiwells"
+}
+```
+
 #### `"observer_predicate"`
 This is optional and doesn't need to be defined, but if defined will determine 
 whether an observing player will be able to see this nametag.

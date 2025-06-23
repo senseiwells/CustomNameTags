@@ -6,7 +6,7 @@ import eu.pb4.placeholders.api.Placeholders
 import net.minecraft.resources.ResourceLocation
 
 object ExtraPlayerPlaceholders {
-    fun register() {
+    internal fun register() {
         Placeholders.register(ResourceLocation.fromNamespaceAndPath("player", "hearts")) { ctx: PlaceholderContext, _: String? ->
             val player = ctx.player
             if (player != null) {

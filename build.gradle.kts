@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.4.5"
+val modVersion = "1.0.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -39,12 +39,19 @@ dependencies {
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.kotlin)
 
-    modCompileOnly(libs.server.replay)
+    modImplementation(libs.polymer.core)
+    modImplementation(libs.polymer.virtual.entity)
 
-    modApi(libs.polymer.core)
-    modApi(libs.polymer.virtual.entity)
     modImplementation(libs.placeholder)
-    includeModImplementation(libs.predicate) {}
+
+    includeModImplementation(libs.arcade.nametags)
+    includeModImplementation(libs.arcade.commands)
+    includeModImplementation(libs.arcade.extensions)
+    includeModImplementation(libs.arcade.event.registry)
+    includeModImplementation(libs.arcade.events.server)
+    includeModImplementation(libs.arcade.utils)
+
+    includeModImplementation(libs.predicate)
 
     includeModImplementation(libs.permissions) {
         exclude(libs.fabric.api.get().group)
@@ -86,7 +93,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            Updated to 1.21.5
+            - Updated to 1.21.6
             """.trimIndent()
         )
         type = STABLE
@@ -142,7 +149,10 @@ publishing {
     }
 }
 
-private fun DependencyHandler.includeModImplementation(provider: Provider<*>, action: Action<ExternalModuleDependency>) {
+private fun DependencyHandler.includeModImplementation(
+    provider: Provider<*>,
+    action: Action<ExternalModuleDependency> = Action { }
+) {
     include(provider, action)
     modImplementation(provider, action)
 }

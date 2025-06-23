@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "nametag",
+  "id": "custom-nametags",
+  "provides": ["nametag"],
   "version": "${version}",
   "name": "Custom Nametags",
   "description": "This mod provides you with a way to customize your player's name tags completely server-side with no need for any client mods.",
@@ -10,6 +11,7 @@
   "contact": {
     "sources": "https://github.com/senseiwells/CustomNameTags"
   },
+  "icon": "assets/custom-nametags/icon.jpg",
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
@@ -21,7 +23,7 @@
     ]
   },
   "mixins": [
-    "nametag.mixins.json"
+
   ],
   "depends": {
     "fabric": "*",

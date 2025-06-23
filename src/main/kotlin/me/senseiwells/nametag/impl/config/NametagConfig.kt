@@ -1,0 +1,22 @@
+package me.senseiwells.nametag.impl.config
+
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import me.senseiwells.nametag.impl.PlaceholderNametag
+import net.casual.arcade.utils.associateBy
+import net.casual.arcade.utils.fieldOfAny
+import net.minecraft.resources.ResourceLocation
+
+data class NametagConfig(
+    val nametags: MutableMap<ResourceLocation, PlaceholderNametag> = LinkedHashMap()
+) {
+    companion object {
+        private val NAMETAGS_CODEC = PlaceholderNametag.CODEC.listOf().associateBy(PlaceholderNametag::id)
+
+        val CODEC: Codec<NametagConfig> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                NAMETAGS_CODEC.fieldOfAny("nametags", "name_tags").orElse(LinkedHashMap()).forGetter(NametagConfig::nametags)
+            ).apply(instance) { NametagConfig(LinkedHashMap(it)) }
+        }
+    }
+}

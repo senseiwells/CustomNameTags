@@ -44,6 +44,13 @@ class NameTagElement(
         this.foreground.seeThrough = false
         this.foreground.textOpacity = 255.toByte()
         this.foreground.setBackground(0)
+
+        val color = this.tag.backgroundColor
+        if (color == null) {
+            this.background.defaultBackground = true
+        } else {
+            this.background.setBackground(color)
+        }
     }
 
     fun sneak() {

@@ -31,6 +31,8 @@ class PlaceholderNameTag(
     @JsonNames("literal")
     @Serializable(with = ComponentSerializer::class)
     val display: Component = Component.empty(),
+    @SerialName("background_color")
+    override val backgroundColor: Int? = null,
     @SerialName("update_interval")
     override val updateInterval: Int = 1,
     @SerialName("visible_radius")

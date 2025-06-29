@@ -22,6 +22,9 @@ interface NameTag {
      */
     val updateInterval: Int
 
+    val backgroundColor: Int?
+        get() = null
+
     /**
      * Whether the name tag should be visible through walls (when not sneaking).
      */

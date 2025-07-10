@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.0.0"
+val modVersion = "1.0.1"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -93,8 +93,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Updated to 1.21.6
-            - Added custom `player_name` and `uuid` predicates for convenience
+            - Fix an issue where nametags would become invisible
             """.trimIndent()
         )
         type = STABLE

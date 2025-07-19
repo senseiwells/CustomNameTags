@@ -30,8 +30,8 @@
     "fabricloader": ">=${fabric_loader_dependency}",
     "fabric-language-kotlin": ">=${fabric_kotlin_dependency}",
     "minecraft": "${minecraft_dependency}",
-    "polymer-core": ">=${polymer_dependency}",
-    "polymer-virtual-entity": ">=${polymer_dependency}",
-    "placeholder-api": ">=${placeholder_dependency}"
+    "placeholder-api": ">=${placeholder_dependency}",
+    "polymer-core": "*",
+    "polymer-virtual-entity": "*"
   }
 }

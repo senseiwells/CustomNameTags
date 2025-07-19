@@ -39,9 +39,6 @@ dependencies {
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.kotlin)
 
-    modImplementation(libs.polymer.core)
-    modImplementation(libs.polymer.virtual.entity)
-
     modImplementation(libs.placeholder)
 
     includeModImplementation(libs.arcade.nametags)
@@ -79,8 +76,7 @@ tasks {
                 "fabric_loader_dependency" to libs.versions.fabric.loader.get(),
                 "fabric_kotlin_dependency" to libs.versions.fabric.kotlin.get(),
                 "minecraft_dependency" to libs.versions.minecraft.get().replaceAfterLast('.', "x"),
-                "polymer_dependency" to libs.versions.polymer.get(),
-                "placeholder_dependency" to libs.versions.placeholder.get()
+                "placeholder_dependency" to libs.versions.placeholder.get(),
             ))
         }
     }

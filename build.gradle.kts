@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "0.3.5"
+val modVersion = "0.3.6"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -87,7 +87,20 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            Backport all fixes from 1.21.4
+            Added custom predicates for player names and uuids
+            which are much more performant that nbt predicates:
+            ```json
+            {
+              "type": "player_name",
+              "name": "senseiwells"
+            }
+            ```
+            ```json
+            {
+              "type": "uuid",
+              "uuid": "d4fca8c4-e083-4300-9a73-bf438847861c"
+            }
+            ```
             """.trimIndent()
         )
         type = STABLE

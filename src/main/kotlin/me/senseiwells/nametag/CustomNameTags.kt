@@ -1,6 +1,5 @@
 package me.senseiwells.nametag
 
-import com.mojang.serialization.JsonOps
 import kotlinx.io.IOException
 import me.senseiwells.nametag.impl.NametagCommand
 import me.senseiwells.nametag.impl.PlaceholderNametag
@@ -10,14 +9,13 @@ import me.senseiwells.nametag.impl.predicate.ExtraPredicates
 import net.casual.arcade.commands.register
 import net.casual.arcade.events.GlobalEventHandler
 import net.casual.arcade.events.ListenerRegistry.Companion.register
-import net.casual.arcade.events.server.ServerLoadedEvent
 import net.casual.arcade.events.server.ServerRegisterCommandEvent
+import net.casual.arcade.events.server.ServerStartEvent
 import net.casual.arcade.events.server.player.PlayerJoinEvent
 import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.addNametag
 import net.casual.arcade.utils.JsonUtils
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.RegistryOps
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import org.apache.logging.log4j.LogManager
@@ -37,7 +35,7 @@ object CustomNameTags: ModInitializer {
 
         this.migrateOldConfigs()
 
-        GlobalEventHandler.Server.register<ServerLoadedEvent> { (server) ->
+        GlobalEventHandler.Server.register<ServerStartEvent> { (server) ->
             this.readConfig(server)
         }
         GlobalEventHandler.Server.register<ServerRegisterCommandEvent> {
@@ -76,11 +74,7 @@ object CustomNameTags: ModInitializer {
         }
 
         try {
-            val json = config.reader().use {
-                JsonUtils.decodeToJsonElement(it)
-            }
-            val ops = RegistryOps.create(JsonOps.INSTANCE, server.registryAccess())
-            this.config = NametagConfig.CODEC.parse(ops, json).orThrow
+            this.config = JsonUtils.decodeWith(NametagConfig.CODEC, config, server.registryAccess()).orThrow
         } catch (e: Exception) {
             this.logger.error("Failed to read CustomNameTag config, generating default", e)
             this.config = NametagConfig()
@@ -92,11 +86,7 @@ object CustomNameTags: ModInitializer {
         val config = this.configPath.resolve("config.json")
         try {
             config.createParentDirectories()
-            val ops = RegistryOps.create(JsonOps.INSTANCE, server.registryAccess())
-            val json = NametagConfig.CODEC.encodeStart(ops, this.config).orThrow
-            config.writer().use {
-                JsonUtils.encode(json, it)
-            }
+            JsonUtils.encodeWith(this.config, NametagConfig.CODEC, config, server.registryAccess())
         } catch (e: Exception) {
             this.logger.error("Failed to write CustomNameTag config", e)
         }

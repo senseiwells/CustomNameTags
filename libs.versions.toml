@@ -1,13 +1,13 @@
 [versions]
-minecraft     = "1.21.8"
-fabric-loader = "0.16.14"
-parchment     = "1.21.6:2025.06.29"
-fabric-api    = "0.129.0+1.21.8"
-fabric-kotlin = "1.13.4+kotlin.2.2.0"
-arcade        = "0.6.1-beta.3+1.21.8"
-placeholder   = "2.7.1+1.21.6"
-predicate     = "0.6.0+1.21.2"
-permissions   = "0.4.0"
+minecraft     = "1.21.9"
+fabric-loader = "0.17.2"
+parchment     = "1.21.8:2025.09.14"
+fabric-api    = "0.133.10+1.21.9"
+fabric-kotlin = "1.13.5+kotlin.2.2.10"
+arcade        = "0.7.0-beta.3+1.21.9"
+placeholder   = "2.8.0+1.21.9"
+predicate     = "0.6.1+1.21.9"
+permissions   = "0.4.1"
 
 # Plugins
 fabric-loom   = "1.11-SNAPSHOT"

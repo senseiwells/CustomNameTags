@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.0.3-beta.5"
+val modVersion = "1.1.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -89,8 +89,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Update to 1.21.8
-            - Fixed an issue where nametags disappear when not around (0, 0, 0)
+            - Update to 1.21.9
             """.trimIndent()
         )
         type = STABLE

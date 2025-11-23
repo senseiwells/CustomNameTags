@@ -11,7 +11,7 @@ permissions   = "0.4.1"
 
 # Plugins
 fabric-loom   = "1.11-SNAPSHOT"
-mod-publish   = "0.8.4"
+mod-publish   = "1.1.0"
 
 [libraries]
 minecraft              = { module = "com.mojang:minecraft"                         , version.ref = "minecraft" }

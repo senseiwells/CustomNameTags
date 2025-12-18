@@ -16,8 +16,9 @@ import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.commands.arguments.ComponentArgument
-import net.minecraft.commands.arguments.ResourceLocationArgument
+import net.minecraft.commands.arguments.IdentifierArgument
 import net.minecraft.network.chat.Component
+import net.minecraft.server.permissions.PermissionLevel
 
 object NametagCommand: CommandTree {
     private val TAG_ALREADY_EXISTS = SimpleCommandExceptionType(Component.literal("A NameTag with that id already exists!"))
@@ -25,16 +26,16 @@ object NametagCommand: CommandTree {
 
     override fun create(buildContext: CommandBuildContext): LiteralArgumentBuilder<CommandSourceStack> {
         return CommandTree.buildLiteral("nametag") {
-            requires { Permissions.check(it, "custom-nametags.command.nametag", 2) }
+            requires { Permissions.check(it, "custom-nametags.command.nametag", PermissionLevel.GAMEMASTERS) }
             literal("create") {
-                argument("identifier", ResourceLocationArgument.id()) {
+                argument("identifier", IdentifierArgument.id()) {
                     argument("text", ComponentArgument.textComponent(buildContext)) {
                         executes(::createNameTag)
                     }
                 }
             }
             literal("delete") {
-                argument("identifier", ResourceLocationArgument.id()) {
+                argument("identifier", IdentifierArgument.id()) {
                     suggests { _, b -> SharedSuggestionProvider.suggestResource(CustomNameTags.getNametagIds(), b) }
                     executes(::deleteNameTag)
                 }
@@ -46,7 +47,7 @@ object NametagCommand: CommandTree {
     }
 
     private fun createNameTag(context: CommandContext<CommandSourceStack>): Int {
-        val id = ResourceLocationArgument.getId(context, "identifier")
+        val id = IdentifierArgument.getId(context, "identifier")
         val literal = ComponentArgument.getRawComponent(context, "text")
 
         if (CustomNameTags.getNametagIds().contains(id)) {
@@ -63,7 +64,7 @@ object NametagCommand: CommandTree {
     }
 
     private fun deleteNameTag(context: CommandContext<CommandSourceStack>): Int {
-        val id = ResourceLocationArgument.getId(context, "identifier")
+        val id = IdentifierArgument.getId(context, "identifier")
         val tag = CustomNameTags.removeNametag(id) ?: throw NO_TAG_EXISTS.create()
         for (player in context.source.server.playerList.players) {
             player.removeNametag(tag)

@@ -7,7 +7,7 @@ import eu.pb4.predicate.api.AbstractPredicate
 import eu.pb4.predicate.api.PredicateContext
 import eu.pb4.predicate.api.PredicateResult
 import net.minecraft.core.UUIDUtil
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.*
 
 class UUIDPredicate(val uuid: UUID): AbstractPredicate(ID, CODEC) {
@@ -19,7 +19,7 @@ class UUIDPredicate(val uuid: UUID): AbstractPredicate(ID, CODEC) {
     companion object {
         private val UUID_CODEC = Codec.withAlternative(UUIDUtil.STRING_CODEC, UUIDUtil.CODEC)
 
-        val ID: ResourceLocation = ResourceLocation.withDefaultNamespace("uuid")
+        val ID: Identifier = Identifier.withDefaultNamespace("uuid")
 
         val CODEC: MapCodec<UUIDPredicate> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(

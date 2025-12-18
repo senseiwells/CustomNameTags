@@ -5,10 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.senseiwells.nametag.impl.PlaceholderNametag
 import net.casual.arcade.utils.associateBy
 import net.casual.arcade.utils.fieldOfAny
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 data class NametagConfig(
-    val nametags: MutableMap<ResourceLocation, PlaceholderNametag> = LinkedHashMap()
+    val nametags: MutableMap<Identifier, PlaceholderNametag> = LinkedHashMap()
 ) {
     companion object {
         private val NAMETAGS_CODEC = PlaceholderNametag.CODEC.listOf().associateBy(PlaceholderNametag::id)

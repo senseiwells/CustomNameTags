@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.1.1"
+val modVersion = "1.2.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -89,7 +89,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Implement `%player:floodgate_name%` placeholder
+            - Update to 1.21.11
             """.trimIndent()
         )
         type = STABLE

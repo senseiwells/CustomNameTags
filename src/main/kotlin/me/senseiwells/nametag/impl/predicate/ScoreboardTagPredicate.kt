@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import eu.pb4.predicate.api.AbstractPredicate
 import eu.pb4.predicate.api.PredicateContext
 import eu.pb4.predicate.api.PredicateResult
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class ScoreboardTagPredicate(val tag: String): AbstractPredicate(ID, CODEC) {
     override fun test(context: PredicateContext): PredicateResult<*> {
@@ -15,7 +15,7 @@ class ScoreboardTagPredicate(val tag: String): AbstractPredicate(ID, CODEC) {
     }
 
     companion object {
-        val ID: ResourceLocation = ResourceLocation.withDefaultNamespace("scoreboard_tag")
+        val ID: Identifier = Identifier.withDefaultNamespace("scoreboard_tag")
 
         val CODEC: MapCodec<ScoreboardTagPredicate> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(

@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import eu.pb4.predicate.api.AbstractPredicate
 import eu.pb4.predicate.api.PredicateContext
 import eu.pb4.predicate.api.PredicateResult
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class PlayerNamePredicate(val name: String): AbstractPredicate(ID, CODEC) {
     override fun test(context: PredicateContext): PredicateResult<*> {
@@ -15,7 +15,7 @@ class PlayerNamePredicate(val name: String): AbstractPredicate(ID, CODEC) {
     }
 
     companion object {
-        val ID: ResourceLocation = ResourceLocation.withDefaultNamespace("player_name")
+        val ID: Identifier = Identifier.withDefaultNamespace("player_name")
 
         val CODEC: MapCodec<PlayerNamePredicate> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(

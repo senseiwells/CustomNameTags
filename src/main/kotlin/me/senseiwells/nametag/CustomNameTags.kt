@@ -16,7 +16,7 @@ import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.ad
 import net.casual.arcade.utils.JsonUtils
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -48,15 +48,15 @@ object CustomNameTags: ModInitializer {
         }
     }
 
-    fun addNametag(id: ResourceLocation, nametag: PlaceholderNametag) {
+    fun addNametag(id: Identifier, nametag: PlaceholderNametag) {
         this.config.nametags[id] = nametag
     }
 
-    fun removeNametag(id: ResourceLocation): PlaceholderNametag? {
+    fun removeNametag(id: Identifier): PlaceholderNametag? {
         return this.config.nametags.remove(id)
     }
 
-    fun getNametagIds(): Set<ResourceLocation> {
+    fun getNametagIds(): Set<Identifier> {
         return this.config.nametags.keys
     }
 

@@ -1,6 +1,7 @@
 package me.senseiwells.nametag.impl
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import eu.pb4.placeholders.api.PlaceholderContext
 import eu.pb4.placeholders.api.Placeholders
 import eu.pb4.placeholders.api.node.TextNode
@@ -15,17 +16,16 @@ import net.casual.arcade.nametags.virtual.NametagHeight
 import net.casual.arcade.utils.TimeUtils.Ticks
 import net.casual.arcade.utils.encodedOptionalFieldOf
 import net.casual.arcade.utils.fieldOfAny
-import net.casual.arcade.utils.serialization.codec.OrderedRecordCodecBuilder
 import net.casual.arcade.utils.time.MinecraftTimeDuration
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import java.util.*
 
 class PlaceholderNametag(
-    val id: ResourceLocation,
+    val id: Identifier,
     val display: Component = Component.empty(),
     override val updateInterval: MinecraftTimeDuration = 1.Ticks,
     val visibleRadius: Double = -1.0,
@@ -79,9 +79,9 @@ class PlaceholderNametag(
             )
         }
 
-        val CODEC: Codec<PlaceholderNametag> = OrderedRecordCodecBuilder.create { instance ->
+        val CODEC: Codec<PlaceholderNametag> = RecordCodecBuilder.create { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("id").forGetter(PlaceholderNametag::id),
+                Identifier.CODEC.fieldOf("id").forGetter(PlaceholderNametag::id),
                 ComponentSerialization.CODEC.fieldOfAny("display", "literal").orElse(Component.empty()).forGetter(PlaceholderNametag::display),
                 MinecraftTimeDuration.CODEC.encodedOptionalFieldOf("update_interval", 1.Ticks).forGetter(PlaceholderNametag::updateInterval),
                 Codec.DOUBLE.encodedOptionalFieldOf("visible_radius", -1.0).forGetter(PlaceholderNametag::visibleRadius),

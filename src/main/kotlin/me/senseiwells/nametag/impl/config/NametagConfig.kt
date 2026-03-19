@@ -3,8 +3,8 @@ package me.senseiwells.nametag.impl.config
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.senseiwells.nametag.impl.PlaceholderNametag
-import net.casual.arcade.utils.associateBy
-import net.casual.arcade.utils.fieldOfAny
+import net.casual.arcade.utils.serialization.codec.associateBy
+import net.casual.arcade.utils.serialization.codec.fieldOfAny
 import net.minecraft.resources.Identifier
 
 data class NametagConfig(

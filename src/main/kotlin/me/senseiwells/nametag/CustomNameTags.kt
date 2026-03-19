@@ -12,7 +12,7 @@ import net.casual.arcade.events.ListenerRegistry.Companion.register
 import net.casual.arcade.events.server.ServerRegisterCommandEvent
 import net.casual.arcade.events.server.ServerStartEvent
 import net.casual.arcade.events.server.player.PlayerJoinEvent
-import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.addNametag
+import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.nametagExtension
 import net.casual.arcade.utils.JsonUtils
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -43,7 +43,7 @@ object CustomNameTags: ModInitializer {
         }
         GlobalEventHandler.Server.register<PlayerJoinEvent> { (player) ->
             for (nametag in this.getNametags()) {
-                player.addNametag(nametag)
+                player.nametagExtension.add(nametag)
             }
         }
     }
@@ -100,7 +100,7 @@ object CustomNameTags: ModInitializer {
                 oldPath.copyToRecursively(this.configPath, overwrite = false, followLinks = true)
                 oldPath.deleteRecursively()
             }
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             this.logger.error("Failed to migrate CustomNameTag configs!")
         }
     }

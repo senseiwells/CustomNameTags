@@ -9,9 +9,7 @@ import net.casual.arcade.commands.CommandTree
 import net.casual.arcade.commands.argument
 import net.casual.arcade.commands.literal
 import net.casual.arcade.commands.success
-import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.addNametag
-import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.removeNametag
-import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.removeNametags
+import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.nametagExtension
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider
@@ -57,7 +55,7 @@ object NametagCommand: CommandTree {
         val tag = PlaceholderNametag(id, literal)
         CustomNameTags.addNametag(id, tag)
         for (player in context.source.server.playerList.players) {
-            player.addNametag(tag)
+            player.nametagExtension.add(tag)
         }
         CustomNameTags.writeConfig(context.source.server)
         return context.source.success(Component.literal("Successfully create NameTag with id $id"))
@@ -67,7 +65,7 @@ object NametagCommand: CommandTree {
         val id = IdentifierArgument.getId(context, "identifier")
         val tag = CustomNameTags.removeNametag(id) ?: throw NO_TAG_EXISTS.create()
         for (player in context.source.server.playerList.players) {
-            player.removeNametag(tag)
+            player.nametagExtension.add(tag)
         }
         CustomNameTags.writeConfig(context.source.server)
         return context.source.success(Component.literal("Successfully delete NameTag $id"))
@@ -76,12 +74,12 @@ object NametagCommand: CommandTree {
     private fun reloadNameTags(context: CommandContext<CommandSourceStack>): Int {
         val players = context.source.server.playerList.players
         for (player in players) {
-            player.removeNametags()
+            player.nametagExtension.removeAll()
         }
         CustomNameTags.readConfig(context.source.server)
         for (tag in CustomNameTags.getNametags()) {
             for (player in players) {
-                player.addNametag(tag)
+                player.nametagExtension.add(tag)
             }
         }
         return context.source.success(Component.literal("Successfully reloaded name tags"))

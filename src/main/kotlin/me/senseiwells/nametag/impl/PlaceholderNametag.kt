@@ -14,8 +14,8 @@ import eu.pb4.predicate.api.PredicateRegistry
 import net.casual.arcade.nametags.Nametag
 import net.casual.arcade.nametags.virtual.NametagHeight
 import net.casual.arcade.utils.TimeUtils.Ticks
-import net.casual.arcade.utils.encodedOptionalFieldOf
-import net.casual.arcade.utils.fieldOfAny
+import net.casual.arcade.utils.serialization.codec.encodedOptionalFieldOf
+import net.casual.arcade.utils.serialization.codec.fieldOfAny
 import net.casual.arcade.utils.time.MinecraftTimeDuration
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization

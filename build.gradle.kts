@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.2.0"
+val modVersion = "1.2.1"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -23,7 +23,7 @@ repositories {
     maven("https://maven.parchmentmc.org/")
     maven("https://jitpack.io")
     maven("https://maven.nucleoid.xyz")
-    maven("https://maven.andante.dev/releases/")
+//    maven("https://maven.andante.dev/releases/")
 }
 
 @Suppress("UnstableApiUsage")
@@ -89,7 +89,7 @@ tasks {
         file = remapJar.get().archiveFile
         changelog.set(
             """
-            - Update to 1.21.11
+            - Update dependencies
             """.trimIndent()
         )
         type = STABLE

@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.2.1"
+val modVersion = "1.2.2"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -23,7 +23,6 @@ repositories {
     maven("https://maven.parchmentmc.org/")
     maven("https://jitpack.io")
     maven("https://maven.nucleoid.xyz")
-//    maven("https://maven.andante.dev/releases/")
 }
 
 @Suppress("UnstableApiUsage")
@@ -47,6 +46,7 @@ dependencies {
     includeModImplementation(libs.arcade.event.registry)
     includeModImplementation(libs.arcade.events.server)
     includeModImplementation(libs.arcade.utils)
+    includeModImplementation(libs.arcade.virtual.entities)
 
     includeModImplementation(libs.predicate)
 
@@ -90,6 +90,7 @@ tasks {
         changelog.set(
             """
             - Update dependencies
+            - Removed dependency on polymer
             """.trimIndent()
         )
         type = STABLE
@@ -108,9 +109,6 @@ tasks {
             }
             requires {
                 id = "P7dR8mSH"
-            }
-            requires {
-                id = "xGdtZczs"
             }
             requires {
                 id = "eXts2L7r"

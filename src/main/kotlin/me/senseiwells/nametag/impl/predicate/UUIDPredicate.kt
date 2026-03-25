@@ -12,7 +12,7 @@ import java.util.*
 
 class UUIDPredicate(val uuid: UUID): AbstractPredicate(ID, CODEC) {
     override fun test(context: PredicateContext): PredicateResult<*> {
-        val entity = context.entity ?: return PredicateResult.ofFailure()
+        val entity = context.entity() ?: return PredicateResult.ofFailure()
         return PredicateResult.ofBoolean(entity.uuid == this.uuid)
     }
 

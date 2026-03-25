@@ -11,48 +11,42 @@ plugins {
     java
 }
 
-val modVersion = "1.2.2"
+val modVersion = "1.3.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven("https://maven.supersanta.me/snapshots")
     maven("https://maven.parchmentmc.org/")
     maven("https://jitpack.io")
     maven("https://maven.nucleoid.xyz")
+    mavenLocal()
 }
 
-@Suppress("UnstableApiUsage")
 dependencies {
     minecraft(libs.minecraft)
-    @Suppress("UnstableApiUsage")
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.get()}@zip")
-    })
 
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
-    modImplementation(libs.fabric.kotlin)
+    implementation(libs.fabric.loader)
+    implementation(libs.fabric.api)
+    implementation(libs.fabric.kotlin)
 
-    modImplementation(libs.placeholder)
+    implementation(libs.placeholder)
 
-    includeModImplementation(libs.arcade.nametags)
-    includeModImplementation(libs.arcade.commands)
-    includeModImplementation(libs.arcade.extensions)
-    includeModImplementation(libs.arcade.event.registry)
-    includeModImplementation(libs.arcade.events.server)
-    includeModImplementation(libs.arcade.utils)
-    includeModImplementation(libs.arcade.virtual.entities)
+    include(implementation(libs.arcade.nametags.get())!!)
+    include(implementation(libs.arcade.commands.get())!!)
+    include(implementation(libs.arcade.extensions.get())!!)
+    include(implementation(libs.arcade.event.registry.get())!!)
+    include(implementation(libs.arcade.events.server.get())!!)
+    include(implementation(libs.arcade.utils.get())!!)
+    include(implementation(libs.arcade.virtual.entities.get())!!)
 
-    includeModImplementation(libs.predicate)
+    include(implementation(libs.predicate.get())!!)
 
-    includeModImplementation(libs.permissions) {
-        exclude(libs.fabric.api.get().group)
-    }
+    include(implementation(libs.permissions.get())!!)
+
+    localRuntime(libs.puppets)
 }
 
 loom {
@@ -75,7 +69,7 @@ tasks {
                 "version" to modVersion,
                 "fabric_loader_dependency" to libs.versions.fabric.loader.get(),
                 "fabric_kotlin_dependency" to libs.versions.fabric.kotlin.get(),
-                "minecraft_dependency" to libs.versions.minecraft.get().replaceAfterLast('.', "x"),
+                "minecraft_dependency" to libs.versions.minecraft.get(),
                 "placeholder_dependency" to libs.versions.placeholder.get(),
             ))
         }
@@ -86,11 +80,10 @@ tasks {
     }
 
     publishMods {
-        file = remapJar.get().archiveFile
+        file = jar.get().archiveFile
         changelog.set(
             """
-            - Update dependencies
-            - Removed dependency on polymer
+            - Update to 26.1
             """.trimIndent()
         )
         type = STABLE
@@ -141,12 +134,4 @@ publishing {
             }
         }
     }
-}
-
-private fun DependencyHandler.includeModImplementation(
-    provider: Provider<*>,
-    action: Action<ExternalModuleDependency> = Action { }
-) {
-    include(provider, action)
-    modImplementation(provider, action)
 }

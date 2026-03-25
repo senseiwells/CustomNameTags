@@ -10,8 +10,8 @@ import net.minecraft.resources.Identifier
 
 class ScoreboardTagPredicate(val tag: String): AbstractPredicate(ID, CODEC) {
     override fun test(context: PredicateContext): PredicateResult<*> {
-        val entity = context.entity ?: return PredicateResult.ofFailure()
-        return PredicateResult.ofBoolean(entity.tags.contains(this.tag))
+        val entity = context.entity() ?: return PredicateResult.ofFailure()
+        return PredicateResult.ofBoolean(entity.entityTags().contains(this.tag))
     }
 
     companion object {

@@ -10,7 +10,7 @@ import net.minecraft.resources.Identifier
 
 class PlayerNamePredicate(val name: String): AbstractPredicate(ID, CODEC) {
     override fun test(context: PredicateContext): PredicateResult<*> {
-        val player = context.player ?: return PredicateResult.ofFailure()
+        val player = context.player() ?: return PredicateResult.ofFailure()
         return PredicateResult.ofBoolean(player.scoreboardName == this.name)
     }
 

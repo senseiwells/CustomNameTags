@@ -2,8 +2,8 @@ package me.senseiwells.nametag.impl
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import eu.pb4.placeholders.api.PlaceholderContext
 import eu.pb4.placeholders.api.Placeholders
+import eu.pb4.placeholders.api.ServerPlaceholderContext
 import eu.pb4.placeholders.api.node.TextNode
 import eu.pb4.placeholders.api.parsers.NodeParser
 import eu.pb4.placeholders.api.parsers.StaticPreParser
@@ -40,7 +40,7 @@ class PlaceholderNametag(
     private val node: TextNode by lazy { PARSER.parseNode(TextNode.convert(this.display)) }
 
     override fun getComponent(observee: Entity): Component {
-        return this.node.toText(PlaceholderContext.of(observee))
+        return this.node.toComponent(ServerPlaceholderContext.of(observee))
     }
 
     override fun isObservable(observee: Entity, observer: ServerPlayer): Boolean {
@@ -51,8 +51,8 @@ class PlaceholderNametag(
             return false
         }
 
-        val result = this.observee.map { it.test(PredicateContext.of(observee)).success }.orElse(true)
-        return result && (this.observer.map { it.test(PredicateContext.of(observer)).success }.orElse(true))
+        val result = this.observee.map { it.test(PredicateContext.of(observee)).success }.orElse(true)!!
+        return result && (this.observer.map { it.test(PredicateContext.of(observer)).success }.orElse(true)!!)
     }
 
     override fun isWithinRange(observee: Entity, observer: ServerPlayer): Boolean {
@@ -74,7 +74,7 @@ class PlaceholderNametag(
         private val PARSER by lazy {
             NodeParser.merge(
                 TagParser.DEFAULT,
-                Placeholders.DEFAULT_PLACEHOLDER_PARSER,
+                Placeholders.SERVER_PLACEHOLDER_PARSER,
                 StaticPreParser.INSTANCE
             )
         }

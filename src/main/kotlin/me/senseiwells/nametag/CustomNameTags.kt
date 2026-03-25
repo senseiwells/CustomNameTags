@@ -18,14 +18,14 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import kotlin.io.path.*
 
 object CustomNameTags: ModInitializer {
     private val configPath = FabricLoader.getInstance().configDir.resolve("custom-nametags")
 
-    private val logger: Logger = LogManager.getLogger("CustomNameTags")
+    private val logger: Logger = LoggerFactory.getLogger("CustomNameTags")
 
     private lateinit var config: NametagConfig
 

@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.3.0"
+val modVersion = "1.3.1"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -83,7 +83,7 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Update to 26.1
+            - Fix some datafixer issues
             """.trimIndent()
         )
         type = STABLE

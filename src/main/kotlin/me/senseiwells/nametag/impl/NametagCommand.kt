@@ -18,7 +18,7 @@ import net.minecraft.commands.arguments.IdentifierArgument
 import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.PermissionLevel
 
-object NametagCommand: CommandTree {
+object NametagCommand: CommandTree<CommandSourceStack> {
     private val TAG_ALREADY_EXISTS = SimpleCommandExceptionType(Component.literal("A NameTag with that id already exists!"))
     private val NO_TAG_EXISTS = SimpleCommandExceptionType(Component.literal("No NameTag with that id exists!"))
 

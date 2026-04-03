@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.3.1"
+val modVersion = "1.3.2"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -69,7 +69,7 @@ tasks {
                 "version" to modVersion,
                 "fabric_loader_dependency" to libs.versions.fabric.loader.get(),
                 "fabric_kotlin_dependency" to libs.versions.fabric.kotlin.get(),
-                "minecraft_dependency" to libs.versions.minecraft.get(),
+                "minecraft_dependency" to "~${libs.versions.minecraft.get()}",
                 "placeholder_dependency" to libs.versions.placeholder.get(),
             ))
         }
@@ -83,7 +83,7 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Fix some datafixer issues
+            - Support 26.1.x
             """.trimIndent()
         )
         type = STABLE

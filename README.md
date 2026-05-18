@@ -1,4 +1,4 @@
-# <img src="./src/main/resources/assets/nametag/icon.png" align="center" width="64px"/> CustomNameTags
+# <img src="./src/main/resources/assets/custom-nametags/icon.png" align="center" width="64px"/> CustomNameTags
 
 This mod provides you with a way to customize your player's
 name tags completely server-side with no need for any client mods.

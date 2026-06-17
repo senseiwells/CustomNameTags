@@ -3,11 +3,11 @@ package me.senseiwells.nametag.impl
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import me.lucko.fabric.api.permissions.v0.Permissions
 import me.senseiwells.nametag.CustomNameTags
 import net.casual.arcade.commands.CommandTree
 import net.casual.arcade.commands.argument
 import net.casual.arcade.commands.literal
+import net.casual.arcade.commands.requiresPermission
 import net.casual.arcade.commands.success
 import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.nametagExtension
 import net.minecraft.commands.CommandBuildContext
@@ -19,12 +19,12 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.permissions.PermissionLevel
 
 object NametagCommand: CommandTree<CommandSourceStack> {
-    private val TAG_ALREADY_EXISTS = SimpleCommandExceptionType(Component.literal("A NameTag with that id already exists!"))
-    private val NO_TAG_EXISTS = SimpleCommandExceptionType(Component.literal("No NameTag with that id exists!"))
+    private val TAG_ALREADY_EXISTS = SimpleCommandExceptionType(Component.literal("A nametag with that id already exists!"))
+    private val NO_TAG_EXISTS = SimpleCommandExceptionType(Component.literal("No nametag with that id exists!"))
 
     override fun create(buildContext: CommandBuildContext): LiteralArgumentBuilder<CommandSourceStack> {
         return CommandTree.buildLiteral("nametag") {
-            requires { Permissions.check(it, "custom-nametags.command.nametag", PermissionLevel.GAMEMASTERS) }
+            requiresPermission(CustomNameTags.id("commands.nametag"), PermissionLevel.GAMEMASTERS)
             literal("create") {
                 argument("identifier", IdentifierArgument.id()) {
                     argument("text", ComponentArgument.textComponent(buildContext)) {
@@ -58,7 +58,7 @@ object NametagCommand: CommandTree<CommandSourceStack> {
             player.nametagExtension.add(tag)
         }
         CustomNameTags.writeConfig(context.source.server)
-        return context.source.success(Component.literal("Successfully create NameTag with id $id"))
+        return context.source.success(Component.literal("Successfully created nametag with id $id"))
     }
 
     private fun deleteNameTag(context: CommandContext<CommandSourceStack>): Int {
@@ -68,7 +68,7 @@ object NametagCommand: CommandTree<CommandSourceStack> {
             player.nametagExtension.add(tag)
         }
         CustomNameTags.writeConfig(context.source.server)
-        return context.source.success(Component.literal("Successfully delete NameTag $id"))
+        return context.source.success(Component.literal("Successfully deleted nametag $id"))
     }
 
     private fun reloadNameTags(context: CommandContext<CommandSourceStack>): Int {
@@ -82,6 +82,6 @@ object NametagCommand: CommandTree<CommandSourceStack> {
                 player.nametagExtension.add(tag)
             }
         }
-        return context.source.success(Component.literal("Successfully reloaded name tags"))
+        return context.source.success(Component.literal("Successfully reloaded nametags"))
     }
 }

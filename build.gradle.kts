@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.3.3"
+val modVersion = "1.4.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -43,8 +43,6 @@ dependencies {
     include(implementation(libs.arcade.virtual.entities.get())!!)
 
     include(implementation(libs.predicate.get())!!)
-
-    include(implementation(libs.permissions.get())!!)
 
     localRuntime(libs.puppets)
 }
@@ -83,7 +81,7 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Fix a bug causing nametags to sometimes detach from players
+            - Update to 26.2
             """.trimIndent()
         )
         type = STABLE
@@ -105,6 +103,9 @@ tasks {
             }
             requires {
                 id = "eXts2L7r"
+            }
+            requires {
+                id = "xGdtZczs"
             }
         }
     }

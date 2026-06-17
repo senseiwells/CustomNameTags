@@ -9,7 +9,7 @@ name tags completely server-side with no need for any client mods.
 
 You are able to do some basic actions from within the game with the `/nametag`
 command, this requires permission level 2 or if you are using a permissions mod
-you can have the permission `"customnametags.command.nametag"`.
+you can have the permission `"custom-nametags.commands.nametag"`.
 
 #### `/nametag create <identifier> <text>`
 This creates a nametag with a given identifier and text, this supports the
@@ -26,7 +26,7 @@ This reloads the config file.
 This mod allows a high level of customization, from the text being
 displayed, whether it is being displayed and who it can be displayed to.
 
-All of this is configured using a json located in `config/CustomNameTags/config.json`.
+All of this is configured using a json located in `config/custom-nametags/config.json`.
 The above image used the following configuration:
 
 ```json

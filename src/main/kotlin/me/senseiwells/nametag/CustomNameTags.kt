@@ -13,6 +13,7 @@ import net.casual.arcade.events.server.ServerRegisterCommandEvent
 import net.casual.arcade.events.server.ServerStartEvent
 import net.casual.arcade.events.server.player.PlayerJoinEvent
 import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.nametagExtension
+import net.casual.arcade.utils.Identifier
 import net.casual.arcade.utils.JsonUtils
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -23,11 +24,16 @@ import org.slf4j.LoggerFactory
 import kotlin.io.path.*
 
 object CustomNameTags: ModInitializer {
-    private val configPath = FabricLoader.getInstance().configDir.resolve("custom-nametags")
+    const val MOD_ID = "custom-nametags"
 
-    private val logger: Logger = LoggerFactory.getLogger("CustomNameTags")
+    private val configPath = FabricLoader.getInstance().configDir.resolve(MOD_ID)
+    private val logger: Logger = LoggerFactory.getLogger(MOD_ID)
 
     private lateinit var config: NametagConfig
+
+    fun id(path: String): Identifier {
+        return Identifier(MOD_ID, path)
+    }
 
     override fun onInitialize() {
         ExtraPlayerPlaceholders.register()

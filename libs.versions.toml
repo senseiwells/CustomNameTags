@@ -1,19 +1,17 @@
 [versions]
-minecraft     = "26.1"
-fabric-loader = "0.18.4"
-parchment     = "1.21.10:2025.10.12"
-fabric-api    = "0.144.0+26.1"
-fabric-kotlin = "1.13.9+kotlin.2.3.10"
-arcade        = "0.9.0-beta.36+26.1.1"
-placeholder   = "3.0.0-beta.2+26.1"
-predicate     = "0.8.1+26.1"
-permissions   = "0.7.0"
+minecraft     = "26.2"
+fabric-loader = "0.19.3"
+fabric-api    = "0.152.1+26.2"
+fabric-kotlin = "1.13.12+kotlin.2.4.0"
+arcade        = "0.10.0-beta.2+26.2"
+placeholder   = "3.1.0-beta.1+26.2"
+predicate     = "0.9.0+26.2"
 
 # Testing
-puppets       = "1.5.0+26.1"
+puppets       = "1.7.0+26.2"
 
 # Plugins
-fabric-loom   = "1.15-SNAPSHOT"
+fabric-loom   = "1.17-SNAPSHOT"
 mod-publish   = "1.1.0"
 
 [libraries]
@@ -21,7 +19,6 @@ minecraft               = { module = "com.mojang:minecraft"                     
 fabric-loader           = { module = "net.fabricmc:fabric-loader"                     , version.ref = "fabric-loader" }
 fabric-api              = { module = "net.fabricmc.fabric-api:fabric-api"             , version.ref = "fabric-api" }
 fabric-kotlin           = { module = "net.fabricmc:fabric-language-kotlin"            , version.ref = "fabric-kotlin" }
-permissions             = { module = "me.lucko:fabric-permissions-api"                , version.ref = "permissions" }
 placeholder             = { module = "eu.pb4:placeholder-api"                         , version.ref = "placeholder" }
 predicate               = { module = "eu.pb4:predicate-api"                           , version.ref = "predicate" }
 arcade-nametags         = { module = "net.casualchampionships:arcade-nametags"        , version.ref = "arcade" }

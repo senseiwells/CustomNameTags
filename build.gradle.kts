@@ -34,13 +34,8 @@ dependencies {
 
     implementation(libs.placeholder)
 
-    include(implementation(libs.arcade.nametags.get())!!)
-    include(implementation(libs.arcade.commands.get())!!)
-    include(implementation(libs.arcade.extensions.get())!!)
-    include(implementation(libs.arcade.event.registry.get())!!)
-    include(implementation(libs.arcade.events.server.get())!!)
-    include(implementation(libs.arcade.utils.get())!!)
-    include(implementation(libs.arcade.virtual.entities.get())!!)
+    include(libs.bundles.arcade)
+    implementation(libs.bundles.arcade)
 
     include(implementation(libs.predicate.get())!!)
 
@@ -50,7 +45,7 @@ dependencies {
 loom {
     runs {
         getByName("server") {
-            runDir = "run/${libs.versions.minecraft.get()}"
+            runDirectory.set(file("run/${libs.versions.minecraft.get()}"))
         }
     }
 }
@@ -103,9 +98,6 @@ tasks {
             }
             requires {
                 id = "eXts2L7r"
-            }
-            requires {
-                id = "xGdtZczs"
             }
         }
     }

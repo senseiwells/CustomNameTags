@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.4.0"
+val modVersion = "1.5.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -76,7 +76,7 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Update to 26.2
+            - Remove dependency on polymer
             """.trimIndent()
         )
         type = STABLE
@@ -90,14 +90,16 @@ tasks {
             projectId = "TizFPouK"
             minecraftVersions.add(libs.versions.minecraft)
 
+            projectDescription.set(file("README.md").readText())
+
             requires {
-                id = "Ha28R6CL"
+                slug = "fabric-api"
             }
             requires {
-                id = "P7dR8mSH"
+                slug = "fabric-language-kotlin"
             }
             requires {
-                id = "eXts2L7r"
+                slug = "placeholder-api"
             }
         }
     }

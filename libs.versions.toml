@@ -8,11 +8,11 @@ placeholder   = "3.1.0-beta.1+26.2"
 predicate     = "0.9.0+26.2"
 
 # Testing
-puppets       = "1.7.0+26.2"
+puppets       = "1.7.1+26.2"
 
 # Plugins
 fabric-loom   = "1.17-SNAPSHOT"
-mod-publish   = "1.1.0"
+mod-publish   = "2.1.1"
 
 [libraries]
 minecraft               = { module = "com.mojang:minecraft"                           , version.ref = "minecraft" }

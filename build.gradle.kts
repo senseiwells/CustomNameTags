@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.5.0"
+val modVersion = "1.5.1"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -76,7 +76,7 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Remove dependency on polymer
+            - Update dependencies
             """.trimIndent()
         )
         type = STABLE

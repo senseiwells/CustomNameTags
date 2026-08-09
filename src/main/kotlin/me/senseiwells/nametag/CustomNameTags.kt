@@ -8,10 +8,10 @@ import me.senseiwells.nametag.impl.placeholder.ExtraPlayerPlaceholders
 import me.senseiwells.nametag.impl.predicate.ExtraPredicates
 import net.casual.arcade.commands.register
 import net.casual.arcade.events.GlobalEventHandler
-import net.casual.arcade.events.ListenerRegistry.Companion.register
 import net.casual.arcade.events.server.ServerRegisterCommandEvent
 import net.casual.arcade.events.server.ServerStartEvent
 import net.casual.arcade.events.server.player.PlayerJoinEvent
+import net.casual.arcade.events.utils.register
 import net.casual.arcade.nametags.extensions.EntityNametagExtension.Companion.nametagExtension
 import net.casual.arcade.utils.Identifier
 import net.casual.arcade.utils.JsonUtils

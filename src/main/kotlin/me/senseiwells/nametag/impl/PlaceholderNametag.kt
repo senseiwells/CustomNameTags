@@ -13,6 +13,8 @@ import eu.pb4.predicate.api.PredicateContext
 import eu.pb4.predicate.api.PredicateRegistry
 import net.casual.arcade.nametags.Nametag
 import net.casual.arcade.nametags.virtual.NametagHeight
+import net.casual.arcade.observer.Observer
+import net.casual.arcade.observer.utils.asPlayerOrNull
 import net.casual.arcade.utils.TimeUtils.Ticks
 import net.casual.arcade.utils.serialization.codec.encodedOptionalFieldOf
 import net.casual.arcade.utils.serialization.codec.fieldOfAny
@@ -43,8 +45,9 @@ class PlaceholderNametag(
         return this.node.toComponent(ServerPlaceholderContext.of(observee))
     }
 
-    override fun isObservable(observee: Entity, observer: ServerPlayer): Boolean {
-        if (observee.isInvisibleTo(observer) && !this.visibleWhenObserveeInvisible) {
+    override fun isObservable(observee: Entity, observer: Observer): Boolean {
+        val player = observer.asPlayerOrNull() ?: return true
+        if (observee.isInvisibleTo(player) && !this.visibleWhenObserveeInvisible) {
             return false
         }
         if (observee.passengers.isNotEmpty() && !this.visibleWithPassengers) {
@@ -52,11 +55,11 @@ class PlaceholderNametag(
         }
 
         val result = this.observee.map { it.test(PredicateContext.of(observee)).success }.orElse(true)!!
-        return result && (this.observer.map { it.test(PredicateContext.of(observer)).success }.orElse(true)!!)
+        return result && (this.observer.map { it.test(PredicateContext.of(player)).success }.orElse(true)!!)
     }
 
-    override fun isWithinRange(observee: Entity, observer: ServerPlayer): Boolean {
-        val distance = observee.distanceToSqr(observer)
+    override fun isWithinRange(observee: Entity, observer: Observer): Boolean {
+        val distance = observee.distanceToSqr(observer.location.position)
         if (this.hiddenRadius >= 0 && distance < this.hiddenRadius * this.hiddenRadius) {
             return false
         }

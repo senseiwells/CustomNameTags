@@ -28,12 +28,13 @@ arcade-events-server    = { module = "net.casualchampionships:arcade-events-serv
 arcade-extensions       = { module = "net.casualchampionships:arcade-extensions"      , version.ref = "arcade" }
 arcade-utils            = { module = "net.casualchampionships:arcade-utils"           , version.ref = "arcade" }
 arcade-virtual-entities = { module = "net.casualchampionships:arcade-virtual-entities", version.ref = "arcade" }
+arcade-observers        = { module = "net.casualchampionships:arcade-observers"       , version.ref = "arcade" }
 
 # Testing
 puppets = { module = "me.senseiwells:puppet-players", version.ref = "puppets" }
 
 [bundles]
-arcade = ["arcade-nametags", "arcade-commands", "arcade-event-registry", "arcade-events-server", "arcade-extensions", "arcade-utils", "arcade-virtual-entities"]
+arcade = ["arcade-nametags", "arcade-commands", "arcade-event-registry", "arcade-events-server", "arcade-extensions", "arcade-utils", "arcade-virtual-entities", "arcade-observers"]
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom"       , version.ref = "fabric-loom" }

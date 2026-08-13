@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.5.1"
+val modVersion = "1.5.2"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -39,7 +39,7 @@ dependencies {
 
     include(implementation(libs.predicate.get())!!)
 
-    localRuntime(libs.puppets)
+//    localRuntime(libs.puppets)
 }
 
 loom {
@@ -76,7 +76,7 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Update dependencies
+            - Fix crashing at startup
             """.trimIndent()
         )
         type = STABLE

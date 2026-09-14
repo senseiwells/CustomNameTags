@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "1.5.2"
+val modVersion = "2.0.0-beta.1"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -38,8 +38,9 @@ dependencies {
     implementation(libs.bundles.arcade)
 
     include(implementation(libs.predicate.get())!!)
+    include(implementation(libs.simple.config.get())!!)
 
-//    localRuntime(libs.puppets)
+    localRuntime(libs.puppets)
 }
 
 loom {
@@ -62,7 +63,7 @@ tasks {
                 "version" to modVersion,
                 "fabric_loader_dependency" to libs.versions.fabric.loader.get(),
                 "fabric_kotlin_dependency" to libs.versions.fabric.kotlin.get(),
-                "minecraft_dependency" to "~${libs.versions.minecraft.get()}",
+                "minecraft_dependency" to replaceVersion(libs.versions.minecraft.get(), "x"),
                 "placeholder_dependency" to libs.versions.placeholder.get(),
             ))
         }
@@ -76,10 +77,25 @@ tasks {
         file = jar.get().archiveFile
         changelog.set(
             """
-            - Fix crashing at startup
+            This version contains a redesign of the nametag config system
+            
+            - Added per-player nametag overrides. Now a defined nametag can be completely
+              overridden on a per-player basis. Most usefully, you can override what
+              text displays for specific players, as well as whether or not nametags
+              are attached to specific players. See the updated mod page for more information. 
+            - Nametags now have priority, nametags will still render in the order they are
+              defined in the config, but this can be further controlled via a specific priority value
+            - Expand the `/nametag` command to allow for more in-game configuration
+              - Added the `/nametag edit` command to edit a nametags text, who it attaches to
+                and its priority
+              - Added the `/nametag player` command to edit per-player overrides
+            - Migrated to version 2 of the config
+              - The format of the config has changed, see the mod page for specifics
+              - All old config files will be automatically updated (and backed up just in case)
+              - Invalid configs are now backed up instead of just being overwritten
             """.trimIndent()
         )
-        type = STABLE
+        type = BETA
         modLoaders.add("fabric")
 
         displayName = "CustomNameTags $modVersion for ${libs.versions.minecraft.get()}"
@@ -129,4 +145,16 @@ publishing {
             }
         }
     }
+}
+
+private val minecraftVersionRegex = Regex("""^(\d+\.\d+)(\.\d+)?(?:-(pre|rc)-?(\d+))?$""")
+
+fun replaceVersion(version: String, patch: String): String {
+    val match = minecraftVersionRegex.matchEntire(version)
+        ?: throw IllegalArgumentException("Unrecognised Minecraft version: $version")
+    val (minor, patchVersion, type, number) = match.destructured
+    if (type.isEmpty()) {
+        return "$minor.$patch"
+    }
+    return "$minor$patchVersion-$type.$number"
 }

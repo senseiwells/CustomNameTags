@@ -4,7 +4,7 @@ This mod provides you with a way to customize your player's
 name tags completely server-side with no need for any client mods.
 
 > This documentation covers the ***latest*** version of the mod, for versions prior to 2.0.0
-> please see the [old documentation](https://github.com/senseiwells/CustomNameTags/tree/26.1)
+> please see the [old documentation](https://github.com/senseiwells/CustomNameTags/blob/26.1/README.md)
 
 ![nametags.png](https://github.com/senseiwells/CustomNameTags/blob/HEAD/assets/nametags.png?raw=true)
 

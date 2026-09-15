@@ -11,7 +11,7 @@ plugins {
     java
 }
 
-val modVersion = "2.0.0-beta.1"
+val modVersion = "2.0.0"
 val releaseVersion = "${modVersion}+${libs.versions.minecraft.get()}"
 version = releaseVersion
 group = "me.senseiwells"
@@ -95,7 +95,7 @@ tasks {
               - Invalid configs are now backed up instead of just being overwritten
             """.trimIndent()
         )
-        type = BETA
+        type = STABLE
         modLoaders.add("fabric")
 
         displayName = "CustomNameTags $modVersion for ${libs.versions.minecraft.get()}"

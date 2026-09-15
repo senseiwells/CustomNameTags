@@ -12,7 +12,7 @@ data class NametagConfig(
     @SerialName("nametags")
     val nametags: MutableMap<String, NametagDefinition> = LinkedHashMap(),
     @SerialName("players")
-    val players: MutableMap<String, MutableMap<String, NametagOverride>> = LinkedHashMap()
+    val players: MutableMap<String, MutableMap<String, @Serializable(with = NametagOverride.Serializer::class) NametagOverride>> = LinkedHashMap()
 ) {
     fun findPlayerKey(uuid: UUID, name: String): String? {
         val dashed = uuid.toString()

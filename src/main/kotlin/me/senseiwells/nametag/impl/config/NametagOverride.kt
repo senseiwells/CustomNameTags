@@ -14,7 +14,7 @@ import net.casual.arcade.nametags.virtual.NametagHeight
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.contents.PlainTextContents
 
-@Serializable(with = NametagOverride.Serializer::class)
+@Serializable
 data class NametagOverride(
     @SerialName("enabled")
     @EncodeDefault(EncodeDefault.Mode.NEVER)

@@ -184,13 +184,13 @@ by their username or uuid. Each entry maps nametag ids to an override:
 {
   "nametags": {
     "rank": { "text": "<red>[Admin]</red>", "for": "operators" },
-    "name": { "text": "%player:displayname_visual%" },
+    "name": { "text": "%player:displayname_visual%" }
   },
   "players": {
     // You can also use uuids instead of usernames
     "senseiwells": {
       // Replaces the text of the "rank" nametag, just for this player
-      "rank": "<gold>[Owner]</gold>",
+      "rank": "<gold>[Owner]</gold>"
     },
     "SuperSanta": {
       // We give the "rank" nametag no matter if SuperSanta is an operator or not

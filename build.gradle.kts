@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.serialization").version(jvmVersion)
     alias(libs.plugins.fabric.loom)
     alias(libs.plugins.mod.publish)
+    alias(libs.plugins.joystick)
     `maven-publish`
     java
 }
@@ -34,13 +35,15 @@ dependencies {
 
     implementation(libs.placeholder)
 
-    include(libs.bundles.arcade)
-    implementation(libs.bundles.arcade)
-
     include(implementation(libs.predicate.get())!!)
     include(implementation(libs.simple.config.get())!!)
 
     localRuntime(libs.puppets)
+}
+
+arcade {
+    version = libs.versions.arcade
+    modules("nametags", "commands")
 }
 
 loom {
